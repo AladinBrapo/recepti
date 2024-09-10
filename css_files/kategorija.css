@@ -1,0 +1,93 @@
+.product-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
+}
+
+.product-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+    width: 23%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    padding: 10px;
+    margin: 10px;
+}
+
+.product-card img {
+    max-width: 100%;
+    height: auto;
+    max-height: 200px;
+    object-fit: contain;
+}
+
+.product-card h3 {
+    margin: 10px 0;
+    font-size: 1.2em;
+    color: black;
+}
+
+.product-card p {
+    margin: 5px 0;
+    color: #333;
+}
+
+.product-card .price {
+    font-size: 1.5em;
+    color: black;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.product-card .btn {
+    background-color: #E3A72F;
+    color: black;
+    padding: 10px;
+    text-align: center;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-top: 10px;
+    text-decoration: none;
+}
+
+.product-card .btn:hover {
+    background-color: #ce9118;
+}
+
+#warning {
+    width: auto;
+    height: 40px;
+    vertical-align: middle;
+}
+
+#warn {
+    width: 45%;
+    background-color: #333;
+    border-radius: 20px;
+    padding: 10px;
+    font-size: 30px;
+    text-align: center;
+    margin-left: 25%;
+    margin-top: 25%;
+}
+
+/* za telefone */
+@media (max-width: 600px) {
+    .product-card {
+        width: 100%;
+        margin: 10px 0;
+    }
+}
+
+/* za tablice */
+@media (max-width: 900px) {
+    .product-card {
+        width: 45%;
+    }
+}
+
