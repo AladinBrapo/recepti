@@ -16,6 +16,10 @@
         <div id="header-text">
 
         </div>
+
+        <div id="popularni-recepti">
+
+        </div>
     </div>
     
     <?php include 'footer.php'; //footer ?>
