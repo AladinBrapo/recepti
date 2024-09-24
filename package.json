@@ -4,7 +4,8 @@
   "description": "Na tej spletni strani bodo bili recepti. Tukaj bodo ljudje lahko najdli in tudi dodali svoje recepte.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "tailwindcss -i ./src/input.css -o ./yummies/output.css --watch"
   },
   "author": "",
   "license": "ISC",
