@@ -29,7 +29,7 @@
                 <a href="#" class="Search text-[#fefefe] text-lg font-normal font-['Poppins'] capitalize">Search</a>
             </div>
             <div class="AccountCircle w-[35px] h-[35px] relative">
-                <a href="#" class="BoundingBox w-[35px] h-[35px] left-0 top-0 absolute bg-[#99431f]">
+                <a href="login.php" class="BoundingBox w-[35px] h-[35px] left-0 top-0 absolute bg-[#99431f]">
                 <img src="../slike/account_circle.png" alt="user-circle">
                 </a>
             </div>

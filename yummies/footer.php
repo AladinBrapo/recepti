@@ -1,4 +1,4 @@
-<div class="Footer w-[1920px] h-[615px] px-[229px] pt-[135px] pb-[100px] left-0 top-[1543px] absolute bg-[#99431f] justify-between items-start inline-flex">
+<div class="Footer w-[1920px] h-[615px] px-[229px] pt-[135px] pb-[100px] left-0 top-[1181px] absolute bg-[#99431f] justify-between items-start inline-flex">
     <div class="Frame51 h-[380px] flex-col justify-start items-start gap-[50px] inline-flex">
         <div class="Frame45 flex-col justify-start items-start gap-[43px] flex">
         <div class="InfoYummiesCom text-[#fefefe] text-[32px] font-normal font-['Poppins']">info@yummies.com</div>

@@ -1,0 +1,35 @@
+/* Hide desktop by default, show on larger screens */
+.desktop-view {
+    display: none;
+}
+
+/* Hide mobile by default, show on smaller screens */
+.mobile-view {
+    display: block;
+}
+
+/* Media query for desktop screens */
+@media screen and (min-width: 768px) {
+    .desktop-view {
+        display: block;
+    }
+
+    .mobile-view {
+        display: none;
+    }
+}
+
+.menu-slide-in {
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+}
+
+.menu-slide-out {
+    transform: translateX(0);
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Skrit meni na začetku */
+.hidden-menu {
+    transform: translateX(100%); /* Namesto right: -100% */
+}
