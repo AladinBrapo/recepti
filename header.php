@@ -1,4 +1,4 @@
-        <div class="Header w-[1465px] h-[50px] left-[227px] top-[66px] absolute justify-center items-center gap-[243.50px] inline-flex">
+<div class="Header w-[1465px] h-[50px] left-[227px] top-[66px] absolute justify-center items-center gap-[243.50px] inline-flex">
             <div class="Frame2 w-[203px] h-[50px] justify-start items-center gap-5 inline-flex">
                 <a href="index.php">
                 <div class="Frame17 w-[50px] h-[50px] bg-[#ffd633] rounded-[100px] justify-start items-center gap-2.5 flex">
@@ -24,9 +24,9 @@
                     <a href="#" class="block px-4 py-2 text-sm text-center hover:text-[#ffd633]">American</a>
                 </div>
                 </div>
-                <a href="#" class="TrendingRecipes text-[#fefefe] text-lg font-normal font-['Poppins'] capitalize">Trending Recipes</a>
+                <a href="search.php" class="TrendingRecipes text-[#fefefe] text-lg font-normal font-['Poppins'] capitalize">Trending Recipes</a><!-- search.php/... Fix -->
                 <a href="#" class="SubmitYourRecipe text-[#fefefe] text-lg font-normal font-['Poppins'] capitalize">Submit your Recipe</a>
-                <a href="#" class="Search text-[#fefefe] text-lg font-normal font-['Poppins'] capitalize">Search</a>
+                <a href="search.php" class="Search text-[#fefefe] text-lg font-normal font-['Poppins'] capitalize">Search</a><!-- search.php/... Fix -->
             </div>
             <div class="AccountCircle w-[35px] h-[35px] relative">
                 <a href="login.php" class="BoundingBox w-[35px] h-[35px] left-0 top-0 absolute bg-[#99431f]">

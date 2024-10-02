@@ -54,21 +54,27 @@
         </ul>
     
         <!-- Other buttons -->
-        <div id="popular-btn" class="PhoneBigButtonVariant w-[247px] h-[78px] left-[16px] top-[430px] absolute bg-[#ffd633] rounded-2xl border border-[#fefefe] flex justify-center items-center">
-            <div class="text-[#010012] text-[21.77px] font-normal font-['Poppins'] capitalize">Popular recipes</div>
-        </div>
-        <div id="submit-btn" class="PhoneBigButtonVariant w-[247px] h-[78px] left-[16px] top-[555px] absolute bg-[#ffd633] rounded-2xl border border-[#fefefe] flex justify-center items-center">
-            <div class="text-[#010012] text-[21.77px] font-normal font-['Poppins'] capitalize">Submit Your Recipe</div>
-        </div>
-        <div id="search-btn" class="PhoneBigButtonVariant w-[247px] h-[78px] left-[16px] top-[680px] absolute bg-[#ffd633] rounded-2xl border border-[#fefefe] flex justify-center items-center">
-            <div class="text-[#010012] text-[21.77px] font-normal font-['Poppins'] capitalize">Search</div>
-        </div>
-    
+        <a href="search.php">
+            <div id="popular-btn" class="PhoneBigButtonVariant w-[247px] h-[78px] left-[16px] top-[430px] absolute bg-[#ffd633] rounded-2xl border border-[#fefefe] flex justify-center items-center">
+                <div class="text-[#010012] text-[21.77px] font-normal font-['Poppins'] capitalize">Popular recipes</div><!-- search.php/... Fix -->
+            </div>
+        </a>
+        <a href="#">
+            <div id="submit-btn" class="PhoneBigButtonVariant w-[247px] h-[78px] left-[16px] top-[555px] absolute bg-[#ffd633] rounded-2xl border border-[#fefefe] flex justify-center items-center">
+                <div class="text-[#010012] text-[21.77px] font-normal font-['Poppins'] capitalize">Submit Your Recipe</div>
+            </div>
+        </a>
+        <a href="search.php">
+            <div id="search-btn" class="PhoneBigButtonVariant w-[247px] h-[78px] left-[16px] top-[680px] absolute bg-[#ffd633] rounded-2xl border border-[#fefefe] flex justify-center items-center">
+                <div class="text-[#010012] text-[21.77px] font-normal font-['Poppins'] capitalize">Search</div><!-- search.php/... Fix -->
+            </div>
+        </a>
+        
         <!-- Login Button -->
         <a href="login.php">
-        <div class="PhoneSmallButtonVariant2 w-[150px] h-10 px-[12.38px] py-[6.19px] left-[17.24px] top-[93px] absolute bg-[#ffd633] rounded-[13px] items-center">
-            <div class="Button text-center text-[#010012] pt-1.5 text-xs font-normal font-['Poppins'] capitalize">Login</div>
-        </div>
+            <div class="PhoneSmallButtonVariant2 w-[150px] h-10 px-[12.38px] py-[6.19px] left-[17.24px] top-[93px] absolute bg-[#ffd633] rounded-[13px] items-center">
+                <div class="Button text-center text-[#010012] pt-1.5 text-xs font-normal font-['Poppins'] capitalize">Login</div>
+            </div>
         </a>
         
         <!-- Account Icon -->
