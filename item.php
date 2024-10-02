@@ -65,7 +65,7 @@
         <div class="TitleNormal w-[82.40px] h-[38.40px] left-[169px] top-[917px] absolute">
             <div class="HeaderNormal left-0 top-0 absolute text-white text-[25.60px] font-medium font-['Poppins'] capitalize">4.5 / 5</div>
         </div>
-        <div class="PhoneButtonVariant2 w-[141.75px] h-[42px] px-[9.51px] py-[4.76px] left-[109px] top-[968px] absolute bg-[#ffd633] rounded-[10.50px] justify-between items-center inline-flex">
+        <div class="PhoneButtonVariant2 w-[141.75px] h-[42px] px-[9.51px] py-[4.76px] left-[109px] top-[968px] absolute bg-[#ffd633] rounded-[10.50px] flex items-center justify-center">
             <div class="Button text-center text-[#010012] text-sm font-normal font-['Poppins'] capitalize">Submit</div>
         </div>
     </div>

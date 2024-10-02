@@ -25,7 +25,7 @@
                 </div>
                 </div>
                 <a href="search.php" class="TrendingRecipes text-[#fefefe] text-lg font-normal font-['Poppins'] capitalize">Trending Recipes</a><!-- search.php/... Fix -->
-                <a href="#" class="SubmitYourRecipe text-[#fefefe] text-lg font-normal font-['Poppins'] capitalize">Submit your Recipe</a>
+                <a href="submit_your_recipe.php" class="SubmitYourRecipe text-[#fefefe] text-lg font-normal font-['Poppins'] capitalize">Submit your Recipe</a>
                 <a href="search.php" class="Search text-[#fefefe] text-lg font-normal font-['Poppins'] capitalize">Search</a><!-- search.php/... Fix -->
             </div>
             <div class="AccountCircle w-[35px] h-[35px] relative">

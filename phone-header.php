@@ -59,7 +59,7 @@
                 <div class="text-[#010012] text-[21.77px] font-normal font-['Poppins'] capitalize">Popular recipes</div><!-- search.php/... Fix -->
             </div>
         </a>
-        <a href="#">
+        <a href="submit_your_recipe.php">
             <div id="submit-btn" class="PhoneBigButtonVariant w-[247px] h-[78px] left-[16px] top-[555px] absolute bg-[#ffd633] rounded-2xl border border-[#fefefe] flex justify-center items-center">
                 <div class="text-[#010012] text-[21.77px] font-normal font-['Poppins'] capitalize">Submit Your Recipe</div>
             </div>
