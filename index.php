@@ -101,7 +101,7 @@
                   </div>
                 </div> 
               </div>
-              <a href="#">
+              <a href="search.php">
                 <div class="Frame18 w-[430px] h-[67px] px-[20.86px] py-[10.50px] bg-[#ffd633] rounded-[152.38px] border-2 border-[#fefefe] flex justify-center items-center">
                     <div class="Frame427320854 flex items-center gap-[31px] w-full">
                         <img class="Yummies1 w-[45.71px] h-[45.71px] rounded-[30.48px]" src="../slike/button-logo.png" alt="button-logo"/>

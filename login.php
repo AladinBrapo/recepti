@@ -1,3 +1,50 @@
+<?php 
+require_once 'baza.php';
+include_once 'seja.php';
+
+if (isset($_POST['sub'])) {
+    // Filtriranje vhodnih podatkov
+    $m = filter_var($_POST['mail'], FILTER_SANITIZE_EMAIL);
+    $p = filter_var($_POST['geslo'], FILTER_SANITIZE_STRING);
+
+    // Preverjanje veljavnosti emaila
+    if (filter_var($m, FILTER_VALIDATE_EMAIL) === false) {
+        echo "Wrong email address.";
+        header("Refresh: 1; URL=login.php");
+        exit();
+    }
+
+    // Pobeg nevarnih znakov za SQL poizvedbe
+    $m = mysqli_real_escape_string($link, $m);
+
+    $sql = "SELECT ime, priimek, geslo, vrsta_up_id, id FROM uporabniki WHERE email = '$m'";
+    $result = mysqli_query($link, $sql);
+
+    if ($result && mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+
+        // Preverjanje gesla
+        if (password_verify($p, $row['geslo'])) {
+            $_SESSION['im'] = $row['ime'];
+            $_SESSION['pr'] = $row['priimek'];
+            $_SESSION['log'] = true;
+            $_SESSION['vrsta_up'] = $row['vrsta_up_id'];
+            $_SESSION['uporabnik_id'] = $row['id'];
+            
+            header("Location: index.php");
+            exit(); 
+        } else {
+            echo "Wrong password.";
+            header("Refresh: 1; URL=login.php");
+            exit();
+        }
+    } else {
+        echo "The user with this email does not exist.";
+        header("Refresh: 1; URL=login.php");
+        exit();
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="sl">
 <head>
@@ -21,18 +68,34 @@
                 <div class="Bg w-[707px] h-[630px] left-0 top-0 absolute "><img src="../slike/BG.png" alt="BG"></div>
                 <div class="BigTitle w-[639.82px] left-[34px] top-[217px] absolute text-center text-[#fefefe] text-[64px] font-medium font-['Poppins'] capitalize">Log in</div>
             </div>
+
+            <form method="post" action="login.php">
             <div class="TitleNormal w-[103px] h-12 left-[839px] top-[638px] absolute">
                 <div class="HeaderNormal left-0 top-0 absolute text-white text-[32px] font-medium font-['Poppins'] capitalize">E-mail</div>
             </div>
+            <div class="Frame427320858 w-[323px] h-[57px] left-[839px] top-[686px] absolute bg-white rounded-[3px] shadow border border-black">
+                <div class="MailUndefinedGlyphUndefined w-6 h-6 left-[285px] top-[17px] absolute"><img src="../slike/mail-icon.png" alt="mail-icon"></div>
+                <input type="email" class="Search w-[265px] h-[33px] left-[10px] top-[12px] absolute text-black/50 text-2xl font-medium font-['Poppins'] capitalize" name="mail" placeholder="Email" required autofocus>
+            </div>
+            
+            
             <div class="TitleNormal w-[156px] h-12 left-[839px] top-[777px] absolute">
                 <div class="HeaderNormal left-0 top-0 absolute text-white text-[32px] font-medium font-['Poppins'] capitalize">Password</div>
             </div>
-            <div class="Frame427320858 w-[323px] h-[57px] left-[839px] top-[686px] absolute bg-white rounded-[3px] shadow border border-black">
-                <div class="MailUndefinedGlyphUndefined w-6 h-6 left-[285px] top-[17px] absolute"><img src="../slike/mail-icon.png" alt="mail-icon"></div>
-            </div>
             <div class="Frame427320859 w-[323px] h-[57px] left-[839px] top-[825px] absolute bg-white rounded-[3px] shadow border border-black">
                 <div class="EyeUndefinedGlyphUndefined w-6 h-6 left-[285px] top-[17px] absolute"><img src="../slike/eye-icon.png" alt="eye-icon"></div>
+                <input type="password" name="geslo" class="Search w-[265px] h-[33px] left-[10px] top-[12px] absolute text-black/50 text-2xl font-medium font-['Poppins'] capitalize" placeholder="Password" required>
             </div>
+            
+            <div class="ButtonVariant2 w-[323px] h-[45.52px] px-[21.68px] py-[10.84px] left-[839px] top-[934px] absolute bg-[#ffd633] rounded-[108.39px] justify-between items-center inline-flex">
+                <img class="Yummies2 w-[32.52px] h-[32.52px] rounded-[33.03px]" src="../slike/button-logo.png" alt="button-logo"/>
+                <input type="submit" name="sub" class="Button text-[#010012] text-[21.68px] font-normal font-['Poppins'] capitalize" value="Login">
+                <div class="ArrowForward w-[26.01px] h-[26.01px] relative">
+                <div class="BoundingBox w-[17px] h-[17px] left-1 top-1 absolute"><img src="../slike/arrow_forward.png" alt="arrow_forward"></div>
+                </div>
+            </div>
+            
+            </form>
             <div class="Frame427320860 w-[323px] h-[57px] left-[839px] top-[1090px] absolute bg-white rounded-[3px] shadow border border-black">
                 <div class="GoogleLogin w-[292px] h-[39px] left-[21px] top-[9px] absolute text-black text-[21.68px] font-normal font-['Poppins'] capitalize">Google login</div>
               </div>
@@ -42,13 +105,7 @@
             <div class="TitleSmall w-[109px] h-6 left-[1061px] top-[1006px] absolute">
                 <a href="register.php" class="TextSmall left-0 top-0 absolute text-[#ffd633] text-base font-medium font-['Poppins'] capitalize">Register now.</a>
             </div>
-            <div class="ButtonVariant2 w-[323px] h-[45.52px] px-[21.68px] py-[10.84px] left-[839px] top-[934px] absolute bg-[#ffd633] rounded-[108.39px] justify-between items-center inline-flex">
-                <img class="Yummies2 w-[32.52px] h-[32.52px] rounded-[33.03px]" src="../slike/button-logo.png" alt="button-logo"/>
-                <div class="Button text-[#010012] text-[21.68px] font-normal font-['Poppins'] capitalize">Log in</div>
-                <div class="ArrowForward w-[26.01px] h-[26.01px] relative">
-                <div class="BoundingBox w-[17px] h-[17px] left-1 top-1 absolute"><img src="../slike/arrow_forward.png" alt="arrow_forward"></div>
-                </div>
-            </div>
+            
         </div>
     </div>
   </div>
@@ -68,9 +125,11 @@
         </div>
         <div class="Frame427320860 w-[232px] h-[40.94px] left-[64px] top-[342.84px] absolute bg-white rounded-sm shadow border border-black">
             <div class="MailUndefinedGlyphUndefined w-[17.24px] h-[17.24px] left-[204.71px] top-[12.21px] absolute"><img src="../slike/mail-icon.png" alt="mail-icon"></div>
+            <div class="Search w-[191px] h-[25px] left-[6px] top-[7.16px] absolute text-black/50 text-xl font-medium font-['Poppins'] capitalize">Search...</div>
         </div>
         <div class="Frame427320861 w-[232px] h-[40.94px] left-[64px] top-[464.95px] absolute bg-white rounded-sm shadow border border-black">
             <div class="EyeUndefinedGlyphUndefined w-[17.24px] h-[17.24px] left-[204.71px] top-[12.21px] absolute"><img src="../slike/eye-icon.png" alt="eye-icon"></div>
+            <div class="Search w-[191px] h-[25px] left-[6px] top-[7.16px] absolute text-black/50 text-xl font-medium font-['Poppins'] capitalize">Search...</div>
         </div>
         
         <div class="TitleSmall w-[195px] h-5 left-[35px] top-[586px] absolute">

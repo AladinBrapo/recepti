@@ -121,7 +121,10 @@
               </div>
             </div>
             <div class="Frame427320862 w-[323px] h-[57px] left-[252px] top-[304px] absolute bg-white rounded-[3px] shadow border border-black">
-              <div class="Search w-[287px] h-[33px] left-[18px] top-[12px] absolute text-black/50 text-2xl font-medium font-['Poppins'] capitalize">Search...</div>
+              <form method="post" action="search.php" id="searchForm">
+                  <input type="text" id="search" name="search" placeholder="Search..." class="Search w-[287px] h-[33px] left-[18px] top-[12px] absolute text-black/50 text-2xl font-medium font-['Poppins'] capitalize">
+                  <button type="submit" id="hiddenSubmit" style="display: none;"></button>
+              </form>
             </div>
             <div class="TitleNormal w-[127px] h-12 left-[252px] top-[207px] absolute">
               <div class="HeaderNormal left-0 top-0 absolute text-white text-[32px] font-medium font-['Poppins'] capitalize">Recipes</div>
@@ -156,8 +159,11 @@
         <div class="TitleNormal w-[90px] h-[34px] left-[45px] top-[101px] absolute">
           <div class="HeaderNormal left-0 top-0 absolute text-white text-[22.98px] font-medium font-['Poppins'] capitalize">Recipes</div>
         </div>
-        <div class="Frame427320864 w-[232px] h-[40.94px] left-[45px] top-[142px] absolute bg-white rounded-sm shadow border border-black"></div>
+        <div class="Frame427320864 w-[232px] h-[40.94px] left-[45px] top-[142px] absolute bg-white rounded-sm shadow border border-black">
+          <div class="Search w-[220.99px] h-[25.41px] left-[6px] top-[7px] absolute text-black/50 text-xl font-medium font-['Poppins'] capitalize">Search...</div>
+        </div>
         <div class="Frame w-[29px] h-[29px] left-[286px] top-[147px] absolute"><img src="slike/search.png" alt="search"></div>
+
         <div class="ButtonVariant1 w-[92px] h-[42px] px-5 left-[49px] top-[195px] absolute rounded-[100px] border border-[#fefefe] flex items-center justify-center">
           <div class="Italian text-center text-[#fefefe] text-xl font-normal font-['Poppins'] capitalize">Italian</div>
         </div>
