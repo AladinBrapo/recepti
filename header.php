@@ -1,6 +1,6 @@
 <?php 
-    include 'baza.php';
-    include 'seja.php';
+    include_once 'baza.php';
+    include_once 'seja.php';
     
     // Enable error reporting
     ini_set('display_errors', 1);
@@ -12,7 +12,7 @@
     ini_set('error_log', 'error.log');
     ?>
     
-    <div class="Header w-[1465px] h-[50px] left-[227px] top-[66px] absolute justify-center items-center gap-[243.50px] inline-flex">
+    <div class="Header w-[1465px] h-[50px] left-[227px] top-[66px] absolute justify-center items-center gap-[243.50px] inline-flex z-[1000]">
         <div class="Frame2 w-[203px] h-[50px] justify-start items-center gap-5 inline-flex">
             <a href="index.php">
             <div class="Frame17 w-[50px] h-[50px] bg-[#ffd633] rounded-[100px] justify-start items-center gap-2.5 flex">
@@ -43,19 +43,38 @@
             <a href="search.php" class="Search text-[#fefefe] text-lg font-normal font-['Poppins'] capitalize">Search</a><!-- search.php/... Fix -->
         </div>
         <div class="AccountCircle w-[35px] h-[35px] relative">
-            <a href="login.php" class="BoundingBox w-[35px] h-[35px] left-1 top-1 absolute bg-[#99431f]">
-            <img src="../slike/account_circle.png" alt="user-circle">
-            </a>
-        </div>
-        <div class="ButtonVariant2 w-[77.86px] h-[30px] px-[14.29px] py-[7.14px] left-[1337px] top-[10px] absolute bg-[#ffd633] rounded-[71.43px] flex items-center justify-center">
+            
             <?php
                 if (isset($_SESSION['log'])) {
                     $i = $_SESSION['im'];
                     $p = $_SESSION['pr'];
-                    echo '<a href="logout.php" class="Button text-[#010012] text-[15px] font-normal font-['.'Poppins'.'] capitalize">Logout</a>'; 
+                    echo '<a href="logout.php" class="BoundingBox w-[35px] h-[35px] left-0.5 top-0.5 absolute bg-[#99431f]">
+                            <img src="../slike/account_circle.png" alt="user-circle">
+                        </a>'; 
                 } else {
-                    echo '<a href="login.php" class="Button text-[#010012] text-[15px] font-normal font-['.'Poppins'.'] capitalize">Login</a>';
+                    echo '<a href="login.php" class="BoundingBox w-[35px] h-[35px] left-0.5 top-0.5 absolute bg-[#99431f]">
+                            <img src="../slike/account_circle.png" alt="user-circle">
+                        </a>';
                 }
             ?>
         </div>
+        
+            <?php
+                if (isset($_SESSION['log'])) {
+                    $i = $_SESSION['im'];
+                    $p = $_SESSION['pr'];
+                    echo '
+                    <a href="logout.php" class="ButtonVariant2 w-[77.86px] h-[30px] px-[14.29px] py-[7.14px] left-[1337px] top-[10px] absolute bg-[#ffd633] rounded-[71.43px] flex items-center justify-center">
+                    <div class="Button text-[#010012] text-[15px] font-normal font-['.'Poppins'.'] capitalize">
+                    Logout
+                    </div></a>'; 
+                } else {
+                    echo '
+                    <a href="login.php" class="ButtonVariant2 w-[77.86px] h-[30px] px-[14.29px] py-[7.14px] left-[1337px] top-[10px] absolute bg-[#ffd633] rounded-[71.43px] flex items-center justify-center">
+                    <div class="Button text-[#010012] text-[15px] font-normal font-['.'Poppins'.'] capitalize">
+                    Login
+                    </div></a>';
+                }
+            ?>
+        
     </div>

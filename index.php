@@ -14,7 +14,7 @@
   <div class="desktop-view"> 
   <div class="w-full sm:w-[1920px]">
     <div class="YummiesRecipesDesktopIndex w-[1920px] h-[2158px] relative bg-[#99431f]">
-          
+          <?php include 'header.php'; //header ?>
           <div class="Footer w-[1920px] h-[615px] px-[229px] pt-[135px] pb-[100px] left-0 top-[1543px] absolute bg-[#99431f] justify-between items-start inline-flex">
                 <div class="Frame51 h-[380px] flex-col justify-start items-start gap-[50px] inline-flex">
                     <div class="Frame45 flex-col justify-start items-start gap-[43px] flex">
@@ -87,7 +87,7 @@
               </div>
             </div>
           </div>
-          <div class="NewHome w-[1706px] h-[935px] left-[1px] top-[181px] absolute justify-between items-center inline-flex">
+          <div class="NewHome w-[1706px] h-[935px] left-[1px] top-[181px] absolute justify-between items-center inline-flex z-[10]">
             <div class="Main w-[824.14px] h-[893px] bg-[#99431f]">
               <img src="../slike/main.png" alt="main">
             </div>
@@ -115,7 +115,7 @@
             </div>
           </div>
           
-            <?php include 'header.php'; //header ?>
+            
           
         </div>
       </div>

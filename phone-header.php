@@ -1,4 +1,18 @@
-<div class="PhoneHeader w-80 h-11 left-[24px] top-[20px] absolute justify-center items-center gap-24 inline-flex">
+<?php 
+    include_once 'baza.php';
+    include_once 'seja.php';
+    
+    // Enable error reporting
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
+    
+    // Log errors to a specific file
+    ini_set('log_errors', 1);
+    ini_set('error_log', 'error.log');
+    ?>
+    
+    <div class="PhoneHeader w-80 h-11 left-[24px] top-[20px] absolute justify-center items-center gap-24 inline-flex">
         <div class="Frame2 self-stretch justify-start items-center gap-4 inline-flex">
             <a href="index.php">
             <div class="Frame17 w-11 h-11 bg-[#ffd633] rounded-3xl justify-start items-center gap-2 flex">
@@ -70,17 +84,42 @@
             </div>
         </a>
         
-        <!-- Login Button -->
-        <a href="login.php">
-            <div class="PhoneSmallButtonVariant2 w-[150px] h-10 px-[12.38px] py-[6.19px] left-[17.24px] top-[93px] absolute bg-[#ffd633] rounded-[13px] items-center">
-                <div class="Button text-center text-[#010012] pt-1.5 text-xs font-normal font-['Poppins'] capitalize">Login</div>
-            </div>
-        </a>
+        
         
         <!-- Account Icon -->
         <div class="AccountCircle w-10 h-10 left-[213px] top-[93px] absolute">
-            <a href="login.php" class="BoundingBox w-[35px] h-[35px] left-0 top-1 absolute">
-                <img src="../slike/account_circle.png" alt="user-circle">
-            </a>
+            <?php
+                if (isset($_SESSION['log'])) {
+                    $i = $_SESSION['im'];
+                    $p = $_SESSION['pr'];
+                    echo '<a href="logout.php" class="BoundingBox w-[35px] h-[35px] left-0 top-1 absolute">
+                            <img src="../slike/account_circle.png" alt="user-circle">
+                          </a>'; 
+                } else {
+                    echo '<a href="login.php" class="BoundingBox w-[35px] h-[35px] left-0 top-1 absolute">
+                            <img src="../slike/account_circle.png" alt="user-circle">
+                          </a>';
+                }
+            ?>
         </div>
+        
+        <!-- Login Button -->
+        <?php
+            if (isset($_SESSION['log'])) {
+                $i = $_SESSION['im'];
+                $p = $_SESSION['pr'];
+                echo '
+                <a href="logout.php" class="PhoneSmallButtonVariant2 w-[150px] h-10 px-[12.38px] py-[6.19px] left-[17.24px] top-[93px] absolute bg-[#ffd633] rounded-[13px] items-center">
+                <div class="Button text-center text-[#010012] pt-1.5 text-xs font-normal font-['.'Poppins'.'] capitalize">
+                Logout
+                </div></a>'; 
+            } else {
+                echo '
+                <a href="login.php" class="PhoneSmallButtonVariant2 w-[150px] h-10 px-[12.38px] py-[6.19px] left-[17.24px] top-[93px] absolute bg-[#ffd633] rounded-[13px] items-center">
+                <div class="Button text-center text-[#010012] pt-1.5 text-xs font-normal font-['.'Poppins'.'] capitalize">
+                Login
+                </div></a>';
+            }
+        ?>
+        
     </div>
