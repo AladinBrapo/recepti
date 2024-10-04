@@ -153,7 +153,7 @@ if (isset($_POST['sub'])) {
 
         <div class="Frame427320870 w-[311px] h-[71px] left-[24px] top-[79px] absolute">
             <div class="TitleNormal w-[284px] h-[55px] left-[14px] top-[8px] absolute">
-                <div class="HeaderNormal left-0 top-0 absolute text-[#ffd633] text-base font-medium font-['Poppins'] capitalize">
+                <div class="HeaderNormal left-[27px] top-0 absolute text-center text-[#ffd633] text-base font-medium font-['Poppins'] capitalize">
                     <?php if ($message): ?>
                         <div class="message">
                             <?php echo $message; ?>
