@@ -33,3 +33,12 @@
 .hidden-menu {
     transform: translateX(100%); /* Namesto right: -100% */
 }
+
+@media (max-width: 640px) {
+    input[type="file"] {
+        width: 220px; /* Adjust width as desired */
+        height: 30px; /* Adjust height as desired */
+        font-size: 0.8rem; /* Adjust font size if needed */
+    }
+}
+  

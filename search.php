@@ -1,3 +1,44 @@
+<?php
+require_once 'baza.php';
+require_once 'seja.php';
+
+$search_query = '';
+
+if (isset($_POST['search'])) {
+    $search_query = mysqli_real_escape_string($link, $_POST['search']);
+    $sql = "SELECT i.id, i.ime as izdelek, i.cena, s.ime as alt, s.url 
+            FROM izdelki i 
+            INNER JOIN slike s ON i.id = s.izdelek_id
+            INNER JOIN zaloga z ON z.izdelek_id = i.id
+            WHERE (i.ime LIKE '%$search_query%' OR i.opis LIKE '%$search_query%')
+            AND z.kolicina > 0";
+    $result = mysqli_query($link, $sql);
+} else if (isset($_GET['kategorija'])) {
+    $kategorija = mysqli_real_escape_string($link, $_GET['kategorija']);
+
+    $sql = "SELECT id FROM kategorije WHERE ime = '$kategorija'";
+    $result = mysqli_query($link, $sql);
+    $row = mysqli_fetch_array($result);
+
+    if ($row) {
+        $kategorija_id = $row['id'];
+
+        $sql = "SELECT i.id, i.ime as izdelek, i.cena, s.ime as alt, s.url 
+                FROM izdelki i 
+                INNER JOIN slike s ON i.id = s.izdelek_id
+                INNER JOIN zaloga z ON z.izdelek_id = i.id
+                WHERE kategorija_id = $kategorija_id AND z.kolicina > 0";
+        $result = mysqli_query($link, $sql);
+    } else {
+        echo "Kategorija ne obstaja.";
+        exit;
+    }
+} else{
+    header("Location: index.php");
+    exit();
+}
+
+?>
 <!DOCTYPE html>
 <html lang="sl">
 <head>
@@ -124,13 +165,13 @@
               <form method="post" action="search.php" id="searchForm">
                   <input type="text" id="search" name="search" placeholder="Search..." class="Search w-[287px] h-[33px] left-[18px] top-[12px] absolute text-black/50 text-2xl font-medium font-['Poppins'] capitalize">
                   <button type="submit" id="hiddenSubmit" style="display: none;"></button>
+                  <div class="Frame w-[45px] h-[45px] left-[585px] top-[310px] absolute"><img src="slike/search.png" alt="search"></div>
               </form>
+              
             </div>
             <div class="TitleNormal w-[127px] h-12 left-[252px] top-[207px] absolute">
               <div class="HeaderNormal left-0 top-0 absolute text-white text-[32px] font-medium font-['Poppins'] capitalize">Recipes</div>
             </div>
-            
-            <div class="Frame w-[45px] h-[45px] left-[585px] top-[310px] absolute"><img src="slike/search.png" alt="search"></div>
             
             <div class="ButtonVariant1 w-[92px] h-[42px] px-5 left-[707px] top-[313px] absolute rounded-[100px] border border-[#fefefe] flex items-center justify-center">
               <div class="Italian text-center text-[#fefefe] text-xl font-normal font-['Poppins'] capitalize">Italian</div>
@@ -190,5 +231,13 @@
       </div>
   </div>
   <script src="js/phone-menu.js"></script>
+  <script>
+    document.getElementById('search').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault(); // Da ne pošlje prazno
+            document.getElementById('searchForm').submit();
+        }
+    });
+  </script>
 </body>
 </html>

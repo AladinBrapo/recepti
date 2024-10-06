@@ -15,11 +15,15 @@ CREATE TABLE `recepti`
   `ime` Varchar(100) NOT NULL,
   `uporabnik_id` Int NOT NULL,
   `opis` Text NOT NULL,
-  `sestavine` Text NOT NULL
+  `sestavine` Text NOT NULL,
+  `kategorija_id` Int NOT NULL
 )
 ;
 
 CREATE INDEX `IX_Relationship3` ON `recepti` (`uporabnik_id`)
+;
+
+CREATE INDEX `IX_Relationship10` ON `recepti` (`kategorija_id`)
 ;
 
 ALTER TABLE `recepti` ADD PRIMARY KEY (`id`)
@@ -95,6 +99,19 @@ CREATE INDEX `IX_Relationship9` ON `slike` (`recept_id`)
 ALTER TABLE `slike` ADD PRIMARY KEY (`id`)
 ;
 
+-- Table kategorije
+
+CREATE TABLE `kategorije`
+(
+  `id` Int NOT NULL,
+  `ime` Varchar(100) NOT NULL,
+  `opis` Varchar(100) NOT NULL
+)
+;
+
+ALTER TABLE `kategorije` ADD PRIMARY KEY (`id`)
+;
+
 -- Create foreign keys (relationships) section -------------------------------------------------
 
 ALTER TABLE `uporabniki` ADD CONSTRAINT `Relationship1` FOREIGN KEY (`vrste_up_id`) REFERENCES `vrste_up` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
@@ -110,6 +127,9 @@ ALTER TABLE `ocene` ADD CONSTRAINT `Relationship8` FOREIGN KEY (`uporabnik_id`) 
 ;
 
 ALTER TABLE `slike` ADD CONSTRAINT `Relationship9` FOREIGN KEY (`recept_id`) REFERENCES `recepti` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+ALTER TABLE `recepti` ADD CONSTRAINT `Relationship10` FOREIGN KEY (`kategorija_id`) REFERENCES `kategorije` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ;
 
 
