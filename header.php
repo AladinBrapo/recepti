@@ -30,17 +30,17 @@
                 Categories
             </div>
             <div class="absolute left-1/2 -translate-x-1/2 mt-0 w-48 bg-[#99431f] text-white rounded-md shadow-lg hidden group-hover:block group-focus-within:block">
-                <a href="#" class="block px-4 py-2 text-sm text-center hover:text-[#ffd633]">Italian</a>
-                <a href="#" class="block px-4 py-2 text-sm text-center hover:text-[#ffd633]">Mexican</a>
-                <a href="#" class="block px-4 py-2 text-sm text-center hover:text-[#ffd633]">Indian</a>
-                <a href="#" class="block px-4 py-2 text-sm text-center hover:text-[#ffd633]">Asian</a>
-                <a href="#" class="block px-4 py-2 text-sm text-center hover:text-[#ffd633]">Mediterranean</a>
-                <a href="#" class="block px-4 py-2 text-sm text-center hover:text-[#ffd633]">American</a>
+                <a href="search.php?cuisine=Italian" class="block px-4 py-2 text-sm text-center hover:text-[#ffd633]">Italian</a>
+                <a href="search.php?cuisine=Mexican" class="block px-4 py-2 text-sm text-center hover:text-[#ffd633]">Mexican</a>
+                <a href="search.php?cuisine=Indian" class="block px-4 py-2 text-sm text-center hover:text-[#ffd633]">Indian</a>
+                <a href="search.php?cuisine=Asian" class="block px-4 py-2 text-sm text-center hover:text-[#ffd633]">Asian</a>
+                <a href="search.php?cuisine=Mediterranean" class="block px-4 py-2 text-sm text-center hover:text-[#ffd633]">Mediterranean</a>
+                <a href="search.php?cuisine=American" class="block px-4 py-2 text-sm text-center hover:text-[#ffd633]">American</a>
             </div>
             </div>
-            <a href="search.php" class="TrendingRecipes text-[#fefefe] text-lg font-normal font-['Poppins'] capitalize">Trending Recipes</a><!-- search.php/... Fix -->
+            <a href="search.php" class="TrendingRecipes text-[#fefefe] text-lg font-normal font-['Poppins'] capitalize">Trending Recipes</a>
             <a href="submit_your_recipe.php" class="SubmitYourRecipe text-[#fefefe] text-lg font-normal font-['Poppins'] capitalize">Submit your Recipe</a>
-            <a href="search.php" class="Search text-[#fefefe] text-lg font-normal font-['Poppins'] capitalize">Search</a><!-- search.php/... Fix -->
+            <a href="search.php" class="Search text-[#fefefe] text-lg font-normal font-['Poppins'] capitalize">Search</a>
         </div>
         <div class="AccountCircle w-[35px] h-[35px] relative">
             

@@ -11,12 +11,12 @@
         <div class="Frame47 flex-col justify-start items-start gap-12 inline-flex">
         <div class="Categories text-[#fefefe] text-[28px] font-normal font-['Poppins'] capitalize leading-[30px]">Categories</div>
         <div class="Frame46 opacity-80 flex-col justify-start items-start gap-5 flex">
-            <a href="#" class="Italian opacity-80 text-[#fefefe] text-base font-normal font-['Poppins'] capitalize leading-[30px]">Italian</a>
-            <a href="#" class="Mexican opacity-80 text-[#fefefe] text-base font-normal font-['Poppins'] capitalize leading-[30px]">Mexican</a>
-            <a href="#" class="Indian opacity-80 text-[#fefefe] text-base font-normal font-['Poppins'] capitalize leading-[30px]">Indian</a>
-            <a href="#" class="Asian opacity-80 text-[#fefefe] text-base font-normal font-['Poppins'] capitalize leading-[30px]">Asian</a>
-            <a href="#" class="Mediterranean opacity-80 text-[#fefefe] text-base font-normal font-['Poppins'] capitalize leading-[30px]">Mediterranean</a>
-            <a href="#" class="American opacity-80 text-[#fefefe] text-base font-normal font-['Poppins'] capitalize leading-[30px]">American</a>
+            <a href="search.php?cuisine=Italian" class="Italian opacity-80 text-[#fefefe] text-base font-normal font-['Poppins'] capitalize leading-[30px]">Italian</a>
+            <a href="search.php?cuisine=Mexican" class="Mexican opacity-80 text-[#fefefe] text-base font-normal font-['Poppins'] capitalize leading-[30px]">Mexican</a>
+            <a href="search.php?cuisine=Indian" class="Indian opacity-80 text-[#fefefe] text-base font-normal font-['Poppins'] capitalize leading-[30px]">Indian</a>
+            <a href="search.php?cuisine=Asian" class="Asian opacity-80 text-[#fefefe] text-base font-normal font-['Poppins'] capitalize leading-[30px]">Asian</a>
+            <a href="search.php?cuisine=Mediterranean" class="Mediterranean opacity-80 text-[#fefefe] text-base font-normal font-['Poppins'] capitalize leading-[30px]">Mediterranean</a>
+            <a href="search.php?cuisine=American" class="American opacity-80 text-[#fefefe] text-base font-normal font-['Poppins'] capitalize leading-[30px]">American</a>
         </div>
         </div>
         <div class="Frame48 flex-col justify-start items-start gap-12 inline-flex">

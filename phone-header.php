@@ -59,12 +59,24 @@
     
         <!-- Categories List (initially hidden) -->
         <ul id="categories-list" class="hidden w-[247px] mx-auto bg-[#ff7033] transition-all duration-300 ease-in-out overflow-hidden absolute left-[16px] top-[390px] rounded-2xl border border-[#fefefe] list-disc">
-            <li class="text-[#fefefe] text-xl font-normal capitalize py-2 px-4">Italian</li>
-            <li class="text-[#fefefe] text-xl font-normal capitalize py-2 px-4">Mexican</li>
-            <li class="text-[#fefefe] text-xl font-normal capitalize py-2 px-4">Indian</li>
-            <li class="text-[#fefefe] text-xl font-normal capitalize py-2 px-4">Asian</li>
-            <li class="text-[#fefefe] text-xl font-normal capitalize py-2 px-4">Mediterranean</li>
-            <li class="text-[#fefefe] text-xl font-normal capitalize py-2 px-4">American</li>
+            <li class="text-[#fefefe] text-xl font-normal capitalize py-2 px-4">
+                <a href="search.php?cuisine=Italian">Italian</a>
+            </li>
+            <li class="text-[#fefefe] text-xl font-normal capitalize py-2 px-4">
+                <a href="search.php?cuisine=Mexican">Mexican</a>
+            </li>
+            <li class="text-[#fefefe] text-xl font-normal capitalize py-2 px-4">
+                <a href="search.php?cuisine=Indian">Indian</a>
+            </li>
+            <li class="text-[#fefefe] text-xl font-normal capitalize py-2 px-4">
+                <a href="search.php?cuisine=Asian">Asian</a>
+            </li>
+            <li class="text-[#fefefe] text-xl font-normal capitalize py-2 px-4">
+                <a href="search.php?cuisine=Mediterranean">Mediterranean</a>
+            </li>
+            <li class="text-[#fefefe] text-xl font-normal capitalize py-2 px-4">
+                <a href="search.php?cuisine=American">American</a>
+            </li>
         </ul>
     
         <!-- Other buttons -->

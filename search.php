@@ -4,12 +4,15 @@ require_once 'seja.php';
 
 $search_query = '';
 
-if (isset($_POST['search']) || isset($_POST['cuisine'])) {
+if (isset($_POST['search']) || isset($_POST['cuisine']) || isset($_GET['cuisine'])) {
     // Get the search query if set
     $search_query = isset($_POST['search']) ? mysqli_real_escape_string($link, $_POST['search']) : '';
 
-    // Get the selected cuisine category if set
+    // Get the selected cuisine category from POST or GET
     $selected_cuisine = isset($_POST['cuisine']) ? mysqli_real_escape_string($link, $_POST['cuisine']) : '';
+    if (isset($_GET['cuisine'])) {
+        $selected_cuisine = mysqli_real_escape_string($link, $_GET['cuisine']);
+    }
 
     // Base SQL query
     $sql = "SELECT r.id, r.ime as recept, r.kratek_opis, s.ime as alt, s.url 
@@ -46,6 +49,7 @@ if (isset($_POST['search']) || isset($_POST['cuisine'])) {
 
     // Execute the query
     $result = mysqli_query($link, $sql);
+    $result_mobile = mysqli_query($link, $sql);
 
 } else {
     // Default query to show all recipes ordered by rating
@@ -55,6 +59,7 @@ if (isset($_POST['search']) || isset($_POST['cuisine'])) {
             LEFT JOIN ocene o ON r.id = o.recept_id 
             ORDER BY o.ocena ASC";
     $result = mysqli_query($link, $sql);
+    $result_mobile = mysqli_query($link, $sql);
 }
 
 
@@ -99,12 +104,12 @@ if (isset($_POST['search']) || isset($_POST['cuisine'])) {
                     <div class="Frame47 flex-col justify-start items-start gap-12 inline-flex">
                     <div class="Categories text-[#fefefe] text-[28px] font-normal font-['Poppins'] capitalize leading-[30px]">Categories</div>
                     <div class="Frame46 opacity-80 flex-col justify-start items-start gap-5 flex">
-                        <a href="#" class="Italian opacity-80 text-[#fefefe] text-base font-normal font-['Poppins'] capitalize leading-[30px]">Italian</a>
-                        <a href="#" class="Mexican opacity-80 text-[#fefefe] text-base font-normal font-['Poppins'] capitalize leading-[30px]">Mexican</a>
-                        <a href="#" class="Indian opacity-80 text-[#fefefe] text-base font-normal font-['Poppins'] capitalize leading-[30px]">Indian</a>
-                        <a href="#" class="Asian opacity-80 text-[#fefefe] text-base font-normal font-['Poppins'] capitalize leading-[30px]">Asian</a>
-                        <a href="#" class="Mediterranean opacity-80 text-[#fefefe] text-base font-normal font-['Poppins'] capitalize leading-[30px]">Mediterranean</a>
-                        <a href="#" class="American opacity-80 text-[#fefefe] text-base font-normal font-['Poppins'] capitalize leading-[30px]">American</a>
+                        <a href="search.php?cuisine=Italian" class="Italian opacity-80 text-[#fefefe] text-base font-normal font-['Poppins'] capitalize leading-[30px]">Italian</a>
+                        <a href="search.php?cuisine=Mexican" class="Mexican opacity-80 text-[#fefefe] text-base font-normal font-['Poppins'] capitalize leading-[30px]">Mexican</a>
+                        <a href="search.php?cuisine=Indian" class="Indian opacity-80 text-[#fefefe] text-base font-normal font-['Poppins'] capitalize leading-[30px]">Indian</a>
+                        <a href="search.php?cuisine=Asian" class="Asian opacity-80 text-[#fefefe] text-base font-normal font-['Poppins'] capitalize leading-[30px]">Asian</a>
+                        <a href="search.php?cuisine=Mediterranean" class="Mediterranean opacity-80 text-[#fefefe] text-base font-normal font-['Poppins'] capitalize leading-[30px]">Mediterranean</a>
+                        <a href="search.php?cuisine=American" class="American opacity-80 text-[#fefefe] text-base font-normal font-['Poppins'] capitalize leading-[30px]">American</a>
                     </div>
                     </div>
                     <div class="Frame48 flex-col justify-start items-start gap-12 inline-flex">
@@ -143,7 +148,7 @@ if (isset($_POST['search']) || isset($_POST['cuisine'])) {
                   }
                   echo '<div class="Item w-[215px] h-[381px] left-['.$x.'px] top-['.$y.'] absolute flex-col justify-center items-center gap-3.5 inline-flex">
                           <a href="item.php?id='.$row['id'].'" style="text-decoration:none;">
-                            <img src="'.$row['url'].'" alt="'.$row['alt'].'" class="Images w-full max-w-[215px] aspect-square left-0 top-0 absolute bg-[#c4c4c4] rounded-[10px]">
+                            <img src="'.$row['url'].'" alt="'.$row['alt'].'" class="Images w-full max-w-[215px] max-h-[215px] aspect-square left-0 top-0 absolute bg-[#c4c4c4] rounded-[10px]">
                             <div class="Title w-[185px] left-[15px] top-[229px] absolute text-[#fefefe] text-xl font-bold font-['.'Poppins'.']">' . $row['recept'] . '</div>
                             <div class="Description w-[185px] left-[15px] top-[333px] absolute text-[#fefefe] text-base font-normal font-['.'Poppins'.']">' . $row['kratek_opis'] . '</div>
                           </a>
@@ -211,8 +216,8 @@ if (isset($_POST['search']) || isset($_POST['cuisine'])) {
                 <?php 
                   if (!empty($search_query)) {
                       echo "in search: " . htmlspecialchars($search_query);
-                  } else if (!empty($kategorija)) {
-                      echo "in category: " . htmlspecialchars($kategorija);
+                  } else if (!empty($selected_cuisine)) {
+                      echo "in category: " . htmlspecialchars($selected_cuisine);
                   }
                 ?>
               </div>
@@ -222,46 +227,91 @@ if (isset($_POST['search']) || isset($_POST['cuisine'])) {
     </div>
   </div>
   <div class="mobile-view">
-      <div class="YummiesRecipesPhoneSearch w-[360px] h-[800px] relative bg-[#99431f]">
+      <div class="YummiesRecipesPhoneSearch w-[360px] h-auto min-h-[800px] relative bg-[#99431f]">
         <?php include 'phone-header.php'; //header ?>
-        <div class="TitleNormal w-[90px] h-[34px] left-[45px] top-[101px] absolute">
-          <div class="HeaderNormal left-0 top-0 absolute text-white text-[22.98px] font-medium font-['Poppins'] capitalize">Recipes</div>
+        <div class="TitleNormal w-[270px] h-[70px] left-[45px] top-[69px] absolute">
+            <div class="HeaderNormal left-0 top-0 absolute text-white text-[22.98px] font-medium font-['Poppins'] capitalize">
+                Recipes
+                <?php 
+                  if (!empty($search_query)) {
+                      echo "in search: " . htmlspecialchars($search_query);
+                  } else if (!empty($selected_cuisine)) {
+                      echo "in category: " . htmlspecialchars($selected_cuisine);
+                  }
+                ?>
+            </div>
         </div>
-        <div class="Frame427320864 w-[232px] h-[40.94px] left-[45px] top-[142px] absolute bg-white rounded-sm shadow border border-black">
-          <div class="Search w-[220.99px] h-[25.41px] left-[6px] top-[7px] absolute text-black/50 text-xl font-medium font-['Poppins'] capitalize">Search...</div>
-        </div>
-        <div class="Frame w-[29px] h-[29px] left-[286px] top-[147px] absolute"><img src="slike/search.png" alt="search"></div>
+        
+        <form method="post" action="search.php" id="searchForm">
+            <div class="Frame427320864 w-[232px] h-[40.94px] left-[45px] top-[142px] absolute bg-white rounded-sm shadow border border-black">
+                <input type="text" id="search" name="search" placeholder="Search..." class="Search w-[220.99px] h-[25.41px] left-[6px] top-[7px] absolute text-black/50 text-xl font-medium font-['Poppins']">
+            </div>
+            <button type="submit" id="hiddenSubmit" class="Frame w-[29px] h-[29px] left-[286px] top-[147px] absolute">
+                <img src="slike/search.png" alt="search">
+            </button>
 
-        <div class="ButtonVariant1 w-[92px] h-[42px] px-5 left-[49px] top-[195px] absolute rounded-[100px] border border-[#fefefe] flex items-center justify-center">
-          <div class="Italian text-center text-[#fefefe] text-xl font-normal font-['Poppins'] capitalize">Italian</div>
-        </div>
-        <div class="ButtonVariant1 w-[114px] h-[42px] px-5 left-[153px] top-[195px] absolute rounded-[100px] border border-[#fefefe] flex items-center justify-center">
-          <div class="Mexican text-[#fefefe] text-xl font-normal font-['Poppins'] capitalize">Mexican</div>
-        </div>
-        <div class="ButtonVariant1 w-[88px] h-[42px] px-5 left-[47px] top-[249px] absolute rounded-[100px] border border-[#fefefe] flex items-center justify-center">
-          <div class="Indian text-[#fefefe] text-xl font-normal font-['Poppins'] capitalize">Indian</div>
-        </div>
-        <div class="ButtonVariant1 px-4 py-1.5 left-[47px] top-[303px] absolute rounded-[100px] border border-[#fefefe] flex items-center justify-center">
-          <div class="Asian text-[#fefefe] text-xl font-normal font-['Poppins'] capitalize">Asian</div>
-        </div>
-        <div class="ButtonVariant1 w-[165px] h-[42px] px-5 left-[150px] top-[249px] absolute rounded-[100px] border border-[#fefefe] flex items-center justify-center">
-          <div class="Mediterranean text-[#fefefe] text-lg font-normal font-['Poppins'] capitalize">Mediterranean</div>
-        </div>
-        <div class="ButtonVariant1 w-[115px] h-[42px] px-5 left-[150px] top-[303px] absolute rounded-[100px] border border-[#fefefe] flex items-center justify-center">
-          <div class="American text-[#fefefe] text-lg font-normal font-['Poppins'] capitalize">American</div>
-        </div>
-        <div class="Item w-[270px] h-[381px] left-[45px] top-[381px] absolute">
-          <div class="Images w-[270px] h-[215px] left-0 top-0 absolute bg-[#c4c4c4] rounded-[10px]"></div>
-          <div class="Title w-[232.33px] left-[18.84px] top-[229px] absolute text-[#fefefe] text-xl font-bold font-['Poppins'] capitalize">Title<br/><br/></div>
-          <div class="Description w-[232.33px] left-[18.84px] top-[333px] absolute text-[#fefefe] text-base font-normal font-['Poppins'] capitalize">Description...<br/></div>
-        </div>
+            <input type="radio" id="italian_p" name="cuisine" value="Italian" class="hidden" />
+            <label for="italian_p" class="ButtonVariant1 w-[92px] h-[42px] px-5 left-[49px] top-[195px] absolute rounded-[100px] border border-[#fefefe] flex items-center justify-center"> 
+                <span class="Italian text-center text-[#fefefe] text-xl font-normal font-['Poppins'] capitalize">Italian</span>
+            </label>
+        
+            <input type="radio" id="mexican_p" name="cuisine" value="Mexican" class="hidden" />
+            <label for="mexican_p" class="ButtonVariant1 w-[114px] h-[42px] px-5 left-[153px] top-[195px] absolute rounded-[100px] border border-[#fefefe] flex items-center justify-center">
+                <span class="Mexican text-[#fefefe] text-xl font-normal font-['Poppins'] capitalize">Mexican</span>
+            </label>
+        
+            <input type="radio" id="indian_p" name="cuisine" value="Indian" class="hidden" />
+            <label for="indian_p" class="ButtonVariant1 w-[88px] h-[42px] px-5 left-[47px] top-[249px] absolute rounded-[100px] border border-[#fefefe] flex items-center justify-center">
+                <span class="Indian text-[#fefefe] text-xl font-normal font-['Poppins'] capitalize">Indian</span>
+            </label>
+        
+            <input type="radio" id="asian_p" name="cuisine" value="Asian" class="hidden" />
+            <label for="asian_p" class="ButtonVariant1 px-4 py-1.5 left-[47px] top-[303px] absolute rounded-[100px] border border-[#fefefe] flex items-center justify-center">
+                <span class="Asian text-[#fefefe] text-xl font-normal font-['Poppins'] capitalize">Asian</span>
+            </label>
+        
+            <input type="radio" id="mediterranean_p" name="cuisine" value="Mediterranean" class="hidden" />
+            <label for="mediterranean_p" class="ButtonVariant1 w-[165px] h-[42px] px-5 left-[150px] top-[249px] absolute rounded-[100px] border border-[#fefefe] flex items-center justify-center">
+                <span class="Mediterranean text-[#fefefe] text-lg font-normal font-['Poppins'] capitalize">Mediterranean</span>
+            </label>
+        
+            <input type="radio" id="american_p" name="cuisine" value="American" class="hidden" />
+            <label for="american_p" class="ButtonVariant1 w-[115px] h-[42px] px-5 left-[150px] top-[303px] absolute rounded-[100px] border border-[#fefefe] flex items-center justify-center">
+                <span class="American text-[#fefefe] text-lg font-normal font-['Poppins'] capitalize">American</span>
+            </label>
+        </form>
+        
+        <?php
+          if (mysqli_num_rows($result_mobile) > 0) {
+            $y=381;
+
+            while ($row = mysqli_fetch_array($result_mobile)) {
+              echo '<div class="Item w-[270px] h-[381px] left-[45px] top-['.$y.'px] absolute">
+                      <a href="item.php?id='.$row['id'].'" style="text-decoration:none;">
+                        <img src="'.$row['url'].'" alt="'.$row['alt'].'" class="Images w-full max-w-[270px] max-h-[215px] aspect-square left-0 top-0 absolute bg-[#c4c4c4] rounded-[10px]">
+                        <div class="Title w-[232.33px] left-[18.84px] top-[229px] absolute text-[#fefefe] text-xl font-bold font-['.'Poppins'.']">' . $row['recept'] . '</div>
+                        <div class="Description w-[232.33px] left-[18.84px] top-[333px] absolute text-[#fefefe] text-base font-normal font-['.'Poppins'.']">' . $row['kratek_opis'] . '</div>
+                      </a>
+                    </div>';
+              $y=$y + 400;
+            }
+          }else{
+              echo '
+                <div class="ErrorCircleUndefinedGlyphUndefined w-12 h-12 left-[156px] top-[403px] absolute">
+                    <img src="../slike/error.png" alt="error" />
+                </div>
+                <div class="TitleNormal w-[245px] h-48 left-[57px] top-[478px] absolute">
+                    <div class="HeaderNormal left-0 top-0 absolute text-[#ffd633] text-[32px] font-medium font-['.'Poppins'.'] capitalize">There are no recipes in this category or search.</div>
+                </div>';
+          }
+        ?>
       </div>
   </div>
   <script src="js/phone-menu.js"></script>
   <script>
     document.getElementById('search').addEventListener('keydown', function(event) {
         if (event.key === 'Enter') {
-            event.preventDefault(); // Da ne pošlje prazno
+            event.preventDefault(); // Da ne po分lje prazno
             document.getElementById('searchForm').submit();
         }
     });
