@@ -4,39 +4,59 @@ require_once 'seja.php';
 
 $search_query = '';
 
-if (isset($_POST['search'])) {
-    $search_query = mysqli_real_escape_string($link, $_POST['search']);
-    $sql = "SELECT i.id, i.ime as izdelek, i.cena, s.ime as alt, s.url 
-            FROM izdelki i 
-            INNER JOIN slike s ON i.id = s.izdelek_id
-            INNER JOIN zaloga z ON z.izdelek_id = i.id
-            WHERE (i.ime LIKE '%$search_query%' OR i.opis LIKE '%$search_query%')
-            AND z.kolicina > 0";
-    $result = mysqli_query($link, $sql);
-} else if (isset($_GET['kategorija'])) {
-    $kategorija = mysqli_real_escape_string($link, $_GET['kategorija']);
+if (isset($_POST['search']) || isset($_POST['cuisine'])) {
+    // Get the search query if set
+    $search_query = isset($_POST['search']) ? mysqli_real_escape_string($link, $_POST['search']) : '';
 
-    $sql = "SELECT id FROM kategorije WHERE ime = '$kategorija'";
-    $result = mysqli_query($link, $sql);
-    $row = mysqli_fetch_array($result);
+    // Get the selected cuisine category if set
+    $selected_cuisine = isset($_POST['cuisine']) ? mysqli_real_escape_string($link, $_POST['cuisine']) : '';
 
-    if ($row) {
-        $kategorija_id = $row['id'];
+    // Base SQL query
+    $sql = "SELECT r.id, r.ime as recept, r.kratek_opis, s.ime as alt, s.url 
+            FROM recepti r 
+            INNER JOIN slike s ON r.id = s.recept_id";
 
-        $sql = "SELECT i.id, i.ime as izdelek, i.cena, s.ime as alt, s.url 
-                FROM izdelki i 
-                INNER JOIN slike s ON i.id = s.izdelek_id
-                INNER JOIN zaloga z ON z.izdelek_id = i.id
-                WHERE kategorija_id = $kategorija_id AND z.kolicina > 0";
-        $result = mysqli_query($link, $sql);
-    } else {
-        echo "Kategorija ne obstaja.";
-        exit;
+    // Add conditions for search and category
+    $conditions = [];
+
+    // Add search condition
+    if (!empty($search_query)) {
+        $conditions[] = "(r.ime LIKE '%$search_query%' OR r.kratek_opis LIKE '%$search_query%')";
     }
-} else{
-    header("Location: index.php");
-    exit();
+
+    // Add cuisine category condition
+    if (!empty($selected_cuisine)) {
+        $sql_cuisine = "SELECT id FROM kategorije WHERE ime = '$selected_cuisine'";
+        $cuisine_result = mysqli_query($link, $sql_cuisine);
+        $cuisine_row = mysqli_fetch_array($cuisine_result);
+
+        if ($cuisine_row) {
+            $cuisine_id = $cuisine_row['id'];
+            $conditions[] = "r.kategorija_id = $cuisine_id";
+        } else {
+            echo "Kategorija ne obstaja.";
+            exit;
+        }
+    }
+
+    // Append conditions to the main query if there are any
+    if (!empty($conditions)) {
+        $sql .= " WHERE " . implode(' AND ', $conditions);
+    }
+
+    // Execute the query
+    $result = mysqli_query($link, $sql);
+
+} else {
+    // Default query to show all recipes ordered by rating
+    $sql = "SELECT r.id, r.ime as recept, r.kratek_opis, s.ime as alt, s.url 
+            FROM recepti r 
+            INNER JOIN slike s ON r.id = s.recept_id
+            LEFT JOIN ocene o ON r.id = o.recept_id 
+            ORDER BY o.ocena ASC";
+    $result = mysqli_query($link, $sql);
 }
+
 
 ?>
 <!DOCTYPE html>
@@ -50,6 +70,16 @@ if (isset($_POST['search'])) {
     <link rel="icon" href="../slike/yummies-logo.png" type="image/png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="css/main.css">
+    <style>
+        input[type="radio"]:checked + label {
+            background-color: #FFD633;
+            color: #010012;
+        }
+    
+        label {
+            transition: background-color 0.3s, color 0.3s;
+        }
+    </style>
 </head>
 <body class="bg-[#99431f] font-['Poppins']">
   <div class="desktop-view"> 
@@ -98,99 +128,96 @@ if (isset($_POST['search'])) {
                     </div>
                 </div>
             </div>
+              <?php
+              if (mysqli_num_rows($result) > 0) {
+                echo '<div class="Frame427320865 w-[1415px] h-auto left-[249px] top-[436px] absolute">';
+                $x=0;
+                $y=0;
+                $count=0;
 
-            <div class="Frame427320865 w-[1415px] h-[790px] left-[249px] top-[436px] absolute">
-              <div class="Item w-[215px] h-[381px] left-0 top-0 absolute">
-                <div class="Images w-[215px] h-[215px] left-0 top-0 absolute bg-[#c4c4c4] rounded-[10px]"></div>
-                <div class="Title w-[185px] left-[15px] top-[229px] absolute text-[#fefefe] text-xl font-bold font-['Poppins'] capitalize">Title<br/><br/></div>
-                <div class="Description w-[185px] left-[15px] top-[333px] absolute text-[#fefefe] text-base font-normal font-['Poppins'] capitalize">Description...<br/></div>
-              </div>
-              <div class="Item w-[215px] h-[381px] left-[240px] top-0 absolute">
-                <div class="Images w-[215px] h-[215px] left-0 top-0 absolute bg-[#c4c4c4] rounded-[10px]"></div>
-                <div class="Title w-[185px] left-[15px] top-[229px] absolute text-[#fefefe] text-xl font-bold font-['Poppins'] capitalize">Title<br/><br/></div>
-                <div class="Description w-[185px] left-[15px] top-[333px] absolute text-[#fefefe] text-base font-normal font-['Poppins'] capitalize">Description...<br/></div>
-              </div>
-              <div class="Item w-[215px] h-[381px] left-[480px] top-0 absolute">
-                <div class="Images w-[215px] h-[215px] left-0 top-0 absolute bg-[#c4c4c4] rounded-[10px]"></div>
-                <div class="Title w-[185px] left-[15px] top-[229px] absolute text-[#fefefe] text-xl font-bold font-['Poppins'] capitalize">Title<br/><br/></div>
-                <div class="Description w-[185px] left-[15px] top-[333px] absolute text-[#fefefe] text-base font-normal font-['Poppins'] capitalize">Description...<br/></div>
-              </div>
-              <div class="Item w-[215px] h-[381px] left-[720px] top-0 absolute">
-                <div class="Images w-[215px] h-[215px] left-0 top-0 absolute bg-[#c4c4c4] rounded-[10px]"></div>
-                <div class="Title w-[185px] left-[15px] top-[229px] absolute text-[#fefefe] text-xl font-bold font-['Poppins'] capitalize">Title<br/><br/></div>
-                <div class="Description w-[185px] left-[15px] top-[333px] absolute text-[#fefefe] text-base font-normal font-['Poppins'] capitalize">Description...<br/></div>
-              </div>
-              <div class="Item w-[215px] h-[381px] left-[960px] top-0 absolute">
-                <div class="Images w-[215px] h-[215px] left-0 top-0 absolute bg-[#c4c4c4] rounded-[10px]"></div>
-                <div class="Title w-[185px] left-[15px] top-[229px] absolute text-[#fefefe] text-xl font-bold font-['Poppins'] capitalize">Title<br/><br/></div>
-                <div class="Description w-[185px] left-[15px] top-[333px] absolute text-[#fefefe] text-base font-normal font-['Poppins'] capitalize">Description...<br/></div>
-              </div>
-              <div class="Item w-[215px] h-[381px] left-[1200px] top-0 absolute">
-                <div class="Images w-[215px] h-[215px] left-0 top-0 absolute bg-[#c4c4c4] rounded-[10px]"></div>
-                <div class="Title w-[185px] left-[15px] top-[229px] absolute text-[#fefefe] text-xl font-bold font-['Poppins'] capitalize">Title<br/><br/></div>
-                <div class="Description w-[185px] left-[15px] top-[333px] absolute text-[#fefefe] text-base font-normal font-['Poppins'] capitalize">Description...<br/></div>
-              </div>
-              <div class="Item w-[215px] h-[381px] left-0 top-[409px] absolute">
-                <div class="Images w-[215px] h-[215px] left-0 top-0 absolute bg-[#c4c4c4] rounded-[10px]"></div>
-                <div class="Title w-[185px] left-[15px] top-[229px] absolute text-[#fefefe] text-xl font-bold font-['Poppins'] capitalize">Title<br/><br/></div>
-                <div class="Description w-[185px] left-[15px] top-[333px] absolute text-[#fefefe] text-base font-normal font-['Poppins'] capitalize">Description...<br/></div>
-              </div>
-              <div class="Item w-[215px] h-[381px] left-[240px] top-[409px] absolute">
-                <div class="Images w-[215px] h-[215px] left-0 top-0 absolute bg-[#c4c4c4] rounded-[10px]"></div>
-                <div class="Title w-[185px] left-[15px] top-[229px] absolute text-[#fefefe] text-xl font-bold font-['Poppins'] capitalize">Title<br/><br/></div>
-                <div class="Description w-[185px] left-[15px] top-[333px] absolute text-[#fefefe] text-base font-normal font-['Poppins'] capitalize">Description...<br/></div>
-              </div>
-              <div class="Item w-[215px] h-[381px] left-[480px] top-[409px] absolute">
-                <div class="Images w-[215px] h-[215px] left-0 top-0 absolute bg-[#c4c4c4] rounded-[10px]"></div>
-                <div class="Title w-[185px] left-[15px] top-[229px] absolute text-[#fefefe] text-xl font-bold font-['Poppins'] capitalize">Title<br/><br/></div>
-                <div class="Description w-[185px] left-[15px] top-[333px] absolute text-[#fefefe] text-base font-normal font-['Poppins'] capitalize">Description...<br/></div>
-              </div>
-              <div class="Item w-[215px] h-[381px] left-[720px] top-[409px] absolute">
-                <div class="Images w-[215px] h-[215px] left-0 top-0 absolute bg-[#c4c4c4] rounded-[10px]"></div>
-                <div class="Title w-[185px] left-[15px] top-[229px] absolute text-[#fefefe] text-xl font-bold font-['Poppins'] capitalize">Title<br/><br/></div>
-                <div class="Description w-[185px] left-[15px] top-[333px] absolute text-[#fefefe] text-base font-normal font-['Poppins'] capitalize">Description...<br/></div>
-              </div>
-              <div class="Item w-[215px] h-[381px] left-[960px] top-[409px] absolute">
-                <div class="Images w-[215px] h-[215px] left-0 top-0 absolute bg-[#c4c4c4] rounded-[10px]"></div>
-                <div class="Title w-[185px] left-[15px] top-[229px] absolute text-[#fefefe] text-xl font-bold font-['Poppins'] capitalize">Title<br/><br/></div>
-                <div class="Description w-[185px] left-[15px] top-[333px] absolute text-[#fefefe] text-base font-normal font-['Poppins'] capitalize">Description...<br/></div>
-              </div>
-              <div class="Item w-[215px] h-[381px] left-[1200px] top-[409px] absolute">
-                <div class="Images w-[215px] h-[215px] left-0 top-0 absolute bg-[#c4c4c4] rounded-[10px]"></div>
-                <div class="Title w-[185px] left-[15px] top-[229px] absolute text-[#fefefe] text-xl font-bold font-['Poppins'] capitalize">Title<br/><br/></div>
-                <div class="Description w-[185px] left-[15px] top-[333px] absolute text-[#fefefe] text-base font-normal font-['Poppins'] capitalize">Description...<br/></div>
-              </div>
-            </div>
-            <div class="Frame427320862 w-[323px] h-[57px] left-[252px] top-[304px] absolute bg-white rounded-[3px] shadow border border-black">
+                while ($row = mysqli_fetch_array($result)) {
+                  if($count == 5){
+                    $x=0;
+                    $y=$y + 409;
+                    $count=0;
+                  }
+                  echo '<div class="Item w-[215px] h-[381px] left-['.$x.'px] top-['.$y.'] absolute flex-col justify-center items-center gap-3.5 inline-flex">
+                          <a href="item.php?id='.$row['id'].'" style="text-decoration:none;">
+                            <img src="'.$row['url'].'" alt="'.$row['alt'].'" class="Images w-full max-w-[215px] aspect-square left-0 top-0 absolute bg-[#c4c4c4] rounded-[10px]">
+                            <div class="Title w-[185px] left-[15px] top-[229px] absolute text-[#fefefe] text-xl font-bold font-['.'Poppins'.']">' . $row['recept'] . '</div>
+                            <div class="Description w-[185px] left-[15px] top-[333px] absolute text-[#fefefe] text-base font-normal font-['.'Poppins'.']">' . $row['kratek_opis'] . '</div>
+                          </a>
+                        </div>';
+                  $x=$x + 240;
+                }
+                echo '</div>';
+              }else{
+                  echo '
+                    <div class="ErrorCircleUndefinedGlyphUndefined w-12 h-12 left-[506px] top-[767px] absolute">
+                        <img src="../slike/error.png" alt="error" />
+                    </div>
+                    <div class="TitleNormal w-[784px] h-12 left-[568px] top-[767px] absolute">
+                        <div class="HeaderNormal left-0 top-0 absolute text-[#ffd633] text-[32px] font-medium font-['.'Poppins'.'] capitalize">There are no recipes in this category or search.</div>
+                    </div>';
+              }
+              ?>
+            
+            <div class="Frame427320872 w-[1167px] h-[57px] left-[252px] top-[304px] absolute">
               <form method="post" action="search.php" id="searchForm">
-                  <input type="text" id="search" name="search" placeholder="Search..." class="Search w-[287px] h-[33px] left-[18px] top-[12px] absolute text-black/50 text-2xl font-medium font-['Poppins'] capitalize">
-                  <button type="submit" id="hiddenSubmit" style="display: none;"></button>
-                  <div class="Frame w-[45px] h-[45px] left-[585px] top-[310px] absolute"><img src="slike/search.png" alt="search"></div>
+                <div class="Frame427320862 w-[323px] h-[57px] px-[18px] py-3 left-0 top-0 absolute bg-white rounded-[3px] shadow border border-black justify-center items-center inline-flex">
+                    <input type="text" id="search" name="search" placeholder="Search..." class="Search w-[287px] h-[33px] text-black/50 text-2xl font-medium font-['Poppins']">
+                </div>
+                <button type="submit" id="hiddenSubmit" class="Frame w-[45px] h-[45px] left-[333px] top-[6px] absolute">
+                    <img src="slike/search.png" alt="search">
+                </button>
+
+                <div class="cuisine-buttons w-[712px] h-[42px] left-[455px] top-[9px] absolute flex gap-3">
+                    <input type="radio" id="italian" name="cuisine" value="Italian" class="hidden" />
+                    <label for="italian" class="ButtonVariant1 w-[92px] h-[42px] rounded-[100px] border border-[#fefefe] flex items-center justify-center cursor-pointer"> 
+                        <span class="text-[#fefefe] text-xl font-normal font-['Poppins'] capitalize">Italian</span>
+                    </label>
+                
+                    <input type="radio" id="mexican" name="cuisine" value="Mexican" class="hidden" />
+                    <label for="mexican" class="ButtonVariant1 w-[114px] h-[42px] rounded-[100px] border border-[#fefefe] flex items-center justify-center cursor-pointer">
+                        <span class="text-[#fefefe] text-xl font-normal font-['Poppins'] capitalize">Mexican</span>
+                    </label>
+                
+                    <input type="radio" id="indian" name="cuisine" value="Indian" class="hidden" />
+                    <label for="indian" class="ButtonVariant1 w-[88px] h-[42px] rounded-[100px] border border-[#fefefe] flex items-center justify-center cursor-pointer">
+                        <span class="text-[#fefefe] text-xl font-normal font-['Poppins'] capitalize">Indian</span>
+                    </label>
+                
+                    <input type="radio" id="asian" name="cuisine" value="Asian" class="hidden" />
+                    <label for="asian" class="ButtonVariant1 w-[88px] h-[42px] rounded-[100px] border border-[#fefefe] flex items-center justify-center cursor-pointer">
+                        <span class="text-[#fefefe] text-xl font-normal font-['Poppins'] capitalize">Asian</span>
+                    </label>
+                
+                    <input type="radio" id="mediterranean" name="cuisine" value="Mediterranean" class="hidden" />
+                    <label for="mediterranean" class="ButtonVariant1 w-[165px] h-[42px] rounded-[100px] border border-[#fefefe] flex items-center justify-center cursor-pointer">
+                        <span class="text-[#fefefe] text-lg font-normal font-['Poppins'] capitalize">Mediterranean</span>
+                    </label>
+                
+                    <input type="radio" id="american" name="cuisine" value="American" class="hidden" />
+                    <label for="american" class="ButtonVariant1 w-[115px] h-[42px] rounded-[100px] border border-[#fefefe] flex items-center justify-center cursor-pointer">
+                        <span class="text-[#fefefe] text-lg font-normal font-['Poppins'] capitalize">American</span>
+                    </label>
+                </div>
               </form>
               
             </div>
-            <div class="TitleNormal w-[127px] h-12 left-[252px] top-[207px] absolute">
-              <div class="HeaderNormal left-0 top-0 absolute text-white text-[32px] font-medium font-['Poppins'] capitalize">Recipes</div>
+            <div class="TitleNormal w-[1412px] h-12 left-[252px] top-[207px] absolute">
+              <div class="HeaderNormal left-0 top-0 absolute text-white text-[32px] font-medium font-['Poppins']">
+                Recipes 
+                <?php 
+                  if (!empty($search_query)) {
+                      echo "in search: " . htmlspecialchars($search_query);
+                  } else if (!empty($kategorija)) {
+                      echo "in category: " . htmlspecialchars($kategorija);
+                  }
+                ?>
+              </div>
             </div>
             
-            <div class="ButtonVariant1 w-[92px] h-[42px] px-5 left-[707px] top-[313px] absolute rounded-[100px] border border-[#fefefe] flex items-center justify-center">
-              <div class="Italian text-center text-[#fefefe] text-xl font-normal font-['Poppins'] capitalize">Italian</div>
-            </div>
-            <div class="ButtonVariant1 w-[114px] h-[42px] px-5 left-[809px] top-[313px] absolute rounded-[100px] border border-[#fefefe] flex items-center justify-center">
-              <div class="Mexican text-[#fefefe] text-xl font-normal font-['Poppins'] capitalize">Mexican</div>
-            </div>
-            <div class="ButtonVariant1 w-[88px] h-[42px] px-5 left-[933px] top-[313px] absolute rounded-[100px] border border-[#fefefe] flex items-center justify-center">
-              <div class="Indian text-[#fefefe] text-xl font-normal font-['Poppins'] capitalize">Indian</div>
-            </div>
-            <div class="ButtonVariant1 px-4 py-1.5 left-[1031px] top-[313px] absolute rounded-[100px] border border-[#fefefe] flex items-center justify-center">
-              <div class="Asian text-[#fefefe] text-xl font-normal font-['Poppins'] capitalize">Asian</div>
-            </div>
-            <div class="ButtonVariant1 w-[165px] h-[42px] px-5 left-[1129px] top-[313px] absolute rounded-[100px] border border-[#fefefe] flex items-center justify-center">
-              <div class="Mediterranean text-[#fefefe] text-lg font-normal font-['Poppins'] capitalize">Mediterranean</div>
-            </div>
-            <div class="ButtonVariant1 w-[115px] h-[42px] px-5 left-[1304px] top-[313px] absolute rounded-[100px] border border-[#fefefe] flex items-center justify-center">
-              <div class="American text-[#fefefe] text-lg font-normal font-['Poppins'] capitalize">American</div>
-            </div>
         </div>
     </div>
   </div>
