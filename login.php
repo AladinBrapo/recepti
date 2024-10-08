@@ -6,6 +6,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+$message = "";
 
 if (isset($_POST['sub'])) {
     // Filtriranje vhodnih podatkov
@@ -14,7 +15,7 @@ if (isset($_POST['sub'])) {
 
     // Preverjanje veljavnosti emaila
     if (filter_var($m, FILTER_VALIDATE_EMAIL) === false) {
-        echo "Wrong email address.";
+        $message = '<div class="success-msg">Wrong email address.</div>';
         header("Refresh: 1; URL=login.php");
         exit();
     }
@@ -39,12 +40,12 @@ if (isset($_POST['sub'])) {
             header("Location: index.php");
             exit(); 
         } else {
-            echo "Wrong password.";
+            $message = '<div class="success-msg">Wrong password.</div>';
             header("Refresh: 1; URL=login.php");
             exit();
         }
     } else {
-        echo "The user with this email does not exist.";
+        $message = '<div class="success-msg">The user with this email does not exist.</div>';
         header("Refresh: 1; URL=login.php");
         exit();
     }
@@ -68,6 +69,18 @@ if (isset($_POST['sub'])) {
         <div class="YummiesRecipesDesktopLogin w-[1920px] h-[1796px] relative bg-[#99431f]">
             <?php include 'header.php'; //header ?>
             <?php include 'footer.php'; //footer ?>
+
+            <div class="Frame427320870 w-[258px] h-[504px] left-[251px] top-[451px] absolute">
+                <div class="TitleNormal w-[196px] h-[436px] left-[31px] top-[34px] absolute">
+                    <div class="HeaderNormal left-0 top-0 absolute text-[#ffd633] text-[32px] font-medium font-['Poppins'] capitalize">
+                        <?php if ($message): ?>
+                            <div class="message">
+                                <?php echo $message; ?>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+             </div>
 
             <div class="BigTitle w-[707px] h-[626px] left-[622px] top-[156px] absolute">
                 <div class="Bg w-[707px] h-[630px] left-0 top-0 absolute "><img src="../slike/BG.png" alt="BG"></div>
@@ -119,6 +132,18 @@ if (isset($_POST['sub'])) {
   <div class="mobile-view">
     <div class="YummiesRecipesPhoneLogin w-[360px] h-[800px] relative bg-[#99431f]">
         <?php include 'phone-header.php'; //header ?>
+
+        <div class="Frame427320871 w-[311px] h-[71px] left-[24px] top-[79px] absolute">
+            <div class="TitleNormal w-[284px] h-[55px] left-[14px] top-[8px] absolute">
+                <div class="HeaderNormal left-[27px] top-0 absolute text-center text-[#ffd633] text-base font-medium font-['Poppins'] capitalize">
+                    <?php if ($message): ?>
+                        <div class="message">
+                            <?php echo $message; ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
 
         <div class="PhoneBigTitle w-[347px] h-[249px] left-[6px] top-[79px] absolute">
             <div class="Bg w-[347px] h-[249px] left-0 top-0 absolute"><img src="../slike/BG-phone.2.png" alt="BG"></div>

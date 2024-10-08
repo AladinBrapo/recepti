@@ -17,7 +17,8 @@ if (isset($_POST['search']) || isset($_POST['cuisine']) || isset($_GET['cuisine'
     // Base SQL query
     $sql = "SELECT r.id, r.ime as recept, r.kratek_opis, s.ime as alt, s.url 
             FROM recepti r 
-            INNER JOIN slike s ON r.id = s.recept_id";
+            INNER JOIN slike s ON r.id = s.recept_id
+            LEFT JOIN ocene o ON r.id = o.recept_id";
 
     // Add conditions for search and category
     $conditions = [];
@@ -47,6 +48,9 @@ if (isset($_POST['search']) || isset($_POST['cuisine']) || isset($_GET['cuisine'
         $sql .= " WHERE " . implode(' AND ', $conditions);
     }
 
+    $sql .= " GROUP BY r.id, r.ime, r.kratek_opis, s.ime, s.url 
+              ORDER BY MAX(o.ocena) DESC ";
+
     // Execute the query
     $result = mysqli_query($link, $sql);
     $result_mobile = mysqli_query($link, $sql);
@@ -57,7 +61,8 @@ if (isset($_POST['search']) || isset($_POST['cuisine']) || isset($_GET['cuisine'
             FROM recepti r 
             INNER JOIN slike s ON r.id = s.recept_id
             LEFT JOIN ocene o ON r.id = o.recept_id 
-            ORDER BY o.ocena ASC";
+            GROUP BY r.id, r.ime, r.kratek_opis, s.ime, s.url
+            ORDER BY MAX(o.ocena) DESC";
     $result = mysqli_query($link, $sql);
     $result_mobile = mysqli_query($link, $sql);
 }
