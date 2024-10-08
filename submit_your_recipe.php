@@ -81,12 +81,20 @@ if (isset($_SESSION['log']) && isset($_SESSION['uporabnik_id'])) {
                 $message = '<div class="error-msg">There was an error uploading the file.</div>';
             }
         }
-        header("Refresh: 2; URL=submit_your_recipe.php");
+        echo "<script>
+                setTimeout(function() {
+                    window.location.href = 'login.php';
+                }, 2000);
+            </script>";
     }
 } else {
     // Display an error message if user is not logged in or uporabnik_id is missing
     $message = '<div class="error-msg">You must be logged in to submit a recipe.</div>';
-    header("Refresh: 2; URL=login.php");
+    echo "<script>
+            setTimeout(function() {
+                window.location.href = 'login.php';
+            }, 2000);
+        </script>";
 }
 ?>
 <!DOCTYPE html>

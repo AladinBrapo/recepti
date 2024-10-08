@@ -1,6 +1,6 @@
 <?php 
-    require_once 'baza.php';
-    include_once 'seja.php';
+require_once 'baza.php';
+include_once 'seja.php';
 
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -15,39 +15,52 @@ if (isset($_POST['sub'])) {
 
     // Preverjanje veljavnosti emaila
     if (filter_var($m, FILTER_VALIDATE_EMAIL) === false) {
-        $message = '<div class="success-msg">Wrong email address.</div>';
-        header("Refresh: 1; URL=login.php");
-        exit();
-    }
-
-    // Pobeg nevarnih znakov za SQL poizvedbe
-    $m = mysqli_real_escape_string($link, $m);
-
-    $sql = "SELECT ime, priimek, geslo, vrsta_up_id, id FROM uporabniki WHERE email = '$m'";
-    $result = mysqli_query($link, $sql);
-
-    if ($result && mysqli_num_rows($result) > 0) {
-        $row = mysqli_fetch_assoc($result);
-
-        // Preverjanje gesla
-        if (password_verify($p, $row['geslo'])) {
-            $_SESSION['im'] = $row['ime'];
-            $_SESSION['pr'] = $row['priimek'];
-            $_SESSION['log'] = true;
-            $_SESSION['vrsta_up'] = $row['vrsta_up_id'];
-            $_SESSION['uporabnik_id'] = $row['id'];
-            
-            header("Location: index.php");
-            exit(); 
-        } else {
-            $message = '<div class="success-msg">Wrong password.</div>';
-            header("Refresh: 1; URL=login.php");
-            exit();
-        }
+        $message = '<div class="error-msg">Invalid email address.</div>';
+        echo "<script>
+                setTimeout(function() {
+                    window.location.href = 'login.php';
+                }, 2000); // Redirect after 2 seconds
+              </script>";
     } else {
-        $message = '<div class="success-msg">The user with this email does not exist.</div>';
-        header("Refresh: 1; URL=login.php");
-        exit();
+        // Pobeg nevarnih znakov za SQL poizvedbe
+        $m = mysqli_real_escape_string($link, $m);
+
+        $sql = "SELECT ime, priimek, geslo, vrsta_up_id, id FROM uporabniki WHERE email = '$m'";
+        $result = mysqli_query($link, $sql);
+
+        if ($result && mysqli_num_rows($result) > 0) {
+            $row = mysqli_fetch_assoc($result);
+
+            // Preverjanje gesla
+            if (password_verify($p, $row['geslo'])) {
+                $_SESSION['im'] = $row['ime'];
+                $_SESSION['pr'] = $row['priimek'];
+                $_SESSION['log'] = true;
+                $_SESSION['vrsta_up'] = $row['vrsta_up_id'];
+                $_SESSION['uporabnik_id'] = $row['id'];
+
+                $message = '<div class="success-msg">Login was successful.</div>';
+                echo "<script>
+                        setTimeout(function() {
+                            window.location.href = 'index.php';
+                        }, 2000);
+                      </script>";
+            } else {
+                $message = '<div class="error-msg">Wrong password.</div>';
+                echo "<script>
+                        setTimeout(function() {
+                            window.location.href = 'login.php';
+                        }, 2000);
+                      </script>";
+            }
+        } else {
+            $message = '<div class="error-msg">The user with this email does not exist.</div>';
+            echo "<script>
+                    setTimeout(function() {
+                        window.location.href = 'login.php';
+                    }, 2000);
+                  </script>";
+        }
     }
 }
 ?>
@@ -135,7 +148,7 @@ if (isset($_POST['sub'])) {
 
         <div class="Frame427320871 w-[311px] h-[71px] left-[24px] top-[79px] absolute">
             <div class="TitleNormal w-[284px] h-[55px] left-[14px] top-[8px] absolute">
-                <div class="HeaderNormal left-[27px] top-0 absolute text-center text-[#ffd633] text-base font-medium font-['Poppins'] capitalize">
+                <div class="HeaderNormal left-[54px] top-0 absolute text-center text-[#ffd633] text-base font-medium font-['Poppins'] capitalize">
                     <?php if ($message): ?>
                         <div class="message">
                             <?php echo $message; ?>

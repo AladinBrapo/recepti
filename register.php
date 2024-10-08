@@ -11,50 +11,62 @@ if (isset($_POST['sub'])) {
     $p = htmlspecialchars($_POST['pri'], ENT_QUOTES, 'UTF-8');
     
     // Preverjanje veljavnosti emaila
-    if (!filter_var($m, FILTER_VALIDATE_EMAIL)) {
-        $message = '<div class="error-msg">Wrong email address.</div>';
-        header("Refresh: 1; URL=register.php");
-        exit();
-    }
+    if (filter_var($m, FILTER_VALIDATE_EMAIL) === false) {
+        $message = '<div class="error-msg">Invalid email address.</div>';
+        echo "<script>
+                    setTimeout(function() {
+                        window.location.href = 'register.php';
+                    }, 2000);
+                  </script>";
+    }else{
 
-    $g2 = password_hash($g, PASSWORD_DEFAULT);
-
-    // Preverjanje, če uporabnik že obstaja
-    $sql = "SELECT * FROM uporabniki WHERE email = ?";
-    $stmt = mysqli_prepare($link, $sql);
-    if (!$stmt) {
-        $message = '<div class="error-msg">Napaka pri pripravi SQL stavka: ' . mysqli_error($link) . '</div>';
-        exit();
-    }
-    mysqli_stmt_bind_param($stmt, "s", $m);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-
-    if ($result) {
-        if (mysqli_num_rows($result) === 1) {
-            $message = '<div class="error-msg">We already have a user under this email. Use another.</div>';
-            header("Refresh: 2; URL=register.php");
-        } else {
-            mysqli_stmt_close($stmt); // Close the statement before reusing the variable
-            $stmt = mysqli_prepare($link, "INSERT INTO uporabniki (ime, priimek, email, geslo, vrsta_up_id) VALUES (?, ?, ?, ?, 1)");
-            if ($stmt) {
-                mysqli_stmt_bind_param($stmt, "ssss", $i, $p, $m, $g2);
-                $executed = mysqli_stmt_execute($stmt);
-                if ($executed) {
-                    $id_up = mysqli_insert_id($link);
-
-                    $message = '<div class="success-msg">Registration was successful.</div>';
-                    header("Refresh: 2; URL=login.php");
-                } else {
-                    $message = '<div class="error-msg">Vstavljanje neuspešno: ' . mysqli_stmt_error($stmt) . '</div>';
-                }
-                mysqli_stmt_close($stmt);
-            } else {
-                $message = '<div class="error-msg">Napaka pri pripravi SQL stavka: ' . mysqli_error($link) . '</div>';
-            }
+        $g2 = password_hash($g, PASSWORD_DEFAULT);
+    
+        // Preverjanje, če uporabnik že obstaja
+        $sql = "SELECT * FROM uporabniki WHERE email = ?";
+        $stmt = mysqli_prepare($link, $sql);
+        if (!$stmt) {
+            $message = '<div class="error-msg">Napaka pri pripravi SQL stavka: ' . mysqli_error($link) . '</div>';
+            exit();
         }
-    } else {
-        $message = '<div class="error-msg">Napaka pri izvajanju poizvedbe: ' . mysqli_error($link) . '</div>';
+        mysqli_stmt_bind_param($stmt, "s", $m);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+    
+        if ($result) {
+            if (mysqli_num_rows($result) === 1) {
+                $message = '<div class="error-msg">We already have a user under this email. Use another.</div>';
+                echo "<script>
+                        setTimeout(function() {
+                            window.location.href = 'register.php';
+                        }, 2000);
+                      </script>";
+            } else {
+                mysqli_stmt_close($stmt); // Close the statement before reusing the variable
+                $stmt = mysqli_prepare($link, "INSERT INTO uporabniki (ime, priimek, email, geslo, vrsta_up_id) VALUES (?, ?, ?, ?, 1)");
+                if ($stmt) {
+                    mysqli_stmt_bind_param($stmt, "ssss", $i, $p, $m, $g2);
+                    $executed = mysqli_stmt_execute($stmt);
+                    if ($executed) {
+                        $id_up = mysqli_insert_id($link);
+    
+                        $message = '<div class="success-msg">Registration was successful.</div>';
+                        echo "<script>
+                                setTimeout(function() {
+                                    window.location.href = 'login.php';
+                                }, 2000);
+                            </script>";
+                    } else {
+                        $message = '<div class="error-msg">Vstavljanje neuspešno: ' . mysqli_stmt_error($stmt) . '</div>';
+                    }
+                    mysqli_stmt_close($stmt);
+                } else {
+                    $message = '<div class="error-msg">Napaka pri pripravi SQL stavka: ' . mysqli_error($link) . '</div>';
+                }
+            }
+        } else {
+            $message = '<div class="error-msg">Napaka pri izvajanju poizvedbe: ' . mysqli_error($link) . '</div>';
+        }
     }
 }
 ?>
