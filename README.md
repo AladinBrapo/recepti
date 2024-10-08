@@ -4,7 +4,6 @@
 + [About](#about)
 + [Getting Started](#getting_started)
 + [Usage](#usage)
-+ [Contributing](../CONTRIBUTING.md)
 
 ## About <a name = "about"></a>
 Website about recipes. People will be able to find new recipes and add their own delicious recipes here. They will also be able to rate them with stars. It is made with Tailwind and responsive for mobile and desktop. Design was made in Figma
