@@ -122,10 +122,10 @@ if (isset($_POST['sub'])) {
                 </div>
 
                 <div class="Frame427320860 w-[323px] h-[57px] left-[1043px] top-[702px] absolute bg-white rounded-[3px] shadow border border-black">
-                    <input type="text" name="ime" placeholder="Name" class="Search w-[287px] h-[33px] left-[18px] top-[12px] absolute text-black/50 text-2xl font-medium font-['Poppins']" required>
+                    <input type="text" name="pri" placeholder="Surname" class="Search w-[287px] h-[33px] left-[18px] top-[12px] absolute text-black/50 text-2xl font-medium font-['Poppins']" required>
                 </div>
                 <div class="Frame427320859 w-[323px] h-[57px] left-[673px] top-[702px] absolute bg-white rounded-[3px] shadow border border-black">
-                    <input type="text" name="pri" placeholder="Surname" class="Search w-[287px] h-[33px] left-[18px] top-[12px] absolute text-black/50 text-2xl font-medium font-['Poppins']" required>
+                    <input type="text" name="ime" placeholder="Name" class="Search w-[287px] h-[33px] left-[18px] top-[12px] absolute text-black/50 text-2xl font-medium font-['Poppins']" required>
                 </div>
                 <div class="Frame427320858 w-[323px] h-[57px] left-[673px] top-[871px] absolute bg-white rounded-[3px] shadow border border-black">
                     <input type="email" name="mail" placeholder="Email" class="Search w-[265px] h-[33px] left-[10px] top-[12px] absolute text-black/50 text-2xl font-medium font-['Poppins']" required>
