@@ -63,13 +63,13 @@
                 <div class="FirstYouDoThisSecondThenYouDoThisThirdThenYouDoThisForthThenYouDoThisFifthThenYouDoThisSixthAtTheEndYouDoThis self-stretch h-[375px] opacity-80 text-[#fefefe] text-xl font-normal font-['Poppins']"><?php echo nl2br(htmlspecialchars($row['opis'])); ?></div>
                 </div>
             </div>
-            <div class="StarRating w-[326px] h-[50px] left-[1310px] top-[1011px] absolute flex items-center gap-[19px]">
+            <div class="StarRating w-[326px] h-[50px] left-[1310px] top-[1011px] absolute flex items-center">
                 <!-- Star Icons for Rating -->
-                <img src="slike/star.png" class="star" alt="1 Star" data-rating="1">
-                <img src="slike/star.png" class="star" alt="2 Stars" data-rating="2">
-                <img src="slike/star.png" class="star" alt="3 Stars" data-rating="3">
-                <img src="slike/star.png" class="star" alt="4 Stars" data-rating="4">
-                <img src="slike/star.png" class="star" alt="5 Stars" data-rating="5">
+                <img src="slike/star.png" class="star px-2" alt="1 Star" data-rating="1">
+                <img src="slike/star.png" class="star px-2" alt="2 Stars" data-rating="2">
+                <img src="slike/star.png" class="star px-2" alt="3 Stars" data-rating="3">
+                <img src="slike/star.png" class="star px-2" alt="4 Stars" data-rating="4">
+                <img src="slike/star.png" class="star px-2" alt="5 Stars" data-rating="5">
             </div>
             <div class="TitleNormal w-[239px] h-12 left-[1282px] top-[1101px] absolute">
                 <div class="HeaderNormal left-0 top-[7px] absolute text-white text-[24px] font-medium font-['Poppins'] capitalize">
