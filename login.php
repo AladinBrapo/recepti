@@ -75,6 +75,7 @@ if (isset($_POST['sub'])) {
     <link rel="icon" href="../slike/yummies-logo.png" type="image/png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="css/main.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body class="bg-[#99431f] font-['Poppins']">
   <div class="desktop-view"> 
@@ -126,12 +127,27 @@ if (isset($_POST['sub'])) {
                     <div class="BoundingBox w-[17px] h-[17px] left-1 top-1 absolute"><img src="../slike/arrow_forward.png" alt="arrow_forward"></div>
                 </div>
             </button>
-
             </form>
             
             <div class="Frame427320860 w-[323px] h-[57px] left-[839px] top-[1090px] absolute bg-white rounded-[3px] shadow border border-black">
-                <div class="GoogleLogin w-[292px] h-[39px] left-[21px] top-[9px] absolute text-black text-[21.68px] font-normal font-['Poppins'] capitalize">Google login</div>
+                    <div id="g_id_onload"
+                         data-client_id="955852252624-jh0s4v7jhu1me00v61nn0u3c8ul0rrcv.apps.googleusercontent.com"
+                         data-context="signin"
+                         data-ux_mode="popup"
+                         data-login_uri="https://yummies.jayram.eu/callback.php"
+                         data-auto_prompt="false">
+                    </div>
+                    
+                    <div class="g_id_signin w-full h-full flex items-center justify-center cursor-pointer hover:bg-gray-200 transition-colors duration-200"
+                         data-type="standard"
+                         data-shape="rectangular"
+                         data-theme="outline"
+                         data-text="signin_with"
+                         data-size="large"
+                         data-logo_alignment="left">
+                    </div>
               </div>
+              
             <div class="TitleSmall w-[222px] h-6 left-[839px] top-[1006px] absolute">
                 <div class="TextSmall left-0 top-0 absolute text-white text-base font-medium font-['Poppins'] capitalize">Don't have an account yet?</div>
             </div>
@@ -187,14 +203,30 @@ if (isset($_POST['sub'])) {
         
         </form>
         
+        <div class="Frame427320861 w-[232px] h-[40.94px] left-[64px] top-[677px] absolute bg-white rounded-sm shadow border border-black">
+            <div id="g_id_onload"
+                 data-client_id="955852252624-jh0s4v7jhu1me00v61nn0u3c8ul0rrcv.apps.googleusercontent.com"
+                 data-context="signin"
+                 data-ux_mode="popup"
+                 data-login_uri="https://yummies.jayram.eu/callback.php"
+                 data-auto_prompt="false">
+            </div>
+            
+            <div class="g_id_signin w-full h-full flex items-center justify-center cursor-pointer hover:bg-gray-200 transition-colors duration-200"
+                 data-type="standard"
+                 data-shape="rectangular"
+                 data-theme="outline"
+                 data-text="signin_with"
+                 data-size="large"
+                 data-logo_alignment="left">
+            </div>
+      </div>
+        
         <div class="TitleSmall w-[195px] h-5 left-[35px] top-[586px] absolute">
             <div class="TextSmall left-0 top-[-0.67px] absolute text-white text-sm font-medium font-['Poppins'] capitalize">Don't have an account yet?</div>
         </div>
         <div class="TitleSmall w-[95px] h-[17px] left-[235px] top-[587px] absolute">
             <a href="register.php" class="TextSmall left-0 top-[-2.17px] absolute text-[#ffd633] text-sm font-medium font-['Poppins'] capitalize">Register Now.</a>
-        </div>
-        <div class="Frame427320861 w-[232px] h-[40.94px] left-[64px] top-[677px] absolute bg-white rounded-sm shadow border border-black">
-            <div class="GoogleLogin w-[209.73px] h-7 left-[15.08px] top-[6.46px] absolute text-black text-base font-normal font-['Poppins'] capitalize">Google login</div>
         </div>
     </div>
   </div>
