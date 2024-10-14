@@ -2,6 +2,10 @@
 require_once 'baza.php';
 include_once 'seja.php';
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+
 $sqlk = "SELECT * FROM kategorije";
 $resultk = mysqli_query($link, $sqlk);
 
@@ -16,14 +20,40 @@ while ($row = mysqli_fetch_array($resultk)) {
 
 // Check if the user is logged in and has a valid uporabnik_id
 if (isset($_SESSION['log']) && isset($_SESSION['uporabnik_id'])) {
+    
     $uporabnik_id = $_SESSION['uporabnik_id'];
 
-    if (isset($_POST['Pošlji'])) {
-        $i = $_POST['ime'];
-        $s = $_POST['sestavine'];
-        $o = $_POST['opis'];
-        $k_o = $_POST['kratek_opis'];
-        $k = $_POST['kategorija'];
+    if (isset($_GET['posodobi'])) {
+        $id = $_GET['posodobi'];
+    
+        //LEFT JOIN, zato če ni slik...
+        $sql = "SELECT r.id, r.ime, r.kratek_opis, r.opis, r.sestavine, r.kategorija_id, s.url AS slika_url, s.ime AS slika_alt
+                        FROM recepti r 
+                        INNER JOIN slike s ON r.id = s.recept_id 
+                        WHERE r.id = $id";
+        $result = mysqli_query($link, $sql);
+        $row = mysqli_fetch_array($result);
+    
+        // Preverimo, ali so podatki na voljo
+        if ($row) {
+            $ime = $row['ime'];
+            $s = $row['sestavine'];
+            $o = $row['opis'];
+            $k_o = $row['kratek_opis'];
+            $k = $row['kategorija_id'];
+            $slika_url = $row['slika_url'];
+        } else {
+            echo "Izdelek s tem ID-jem ne obstaja ali nima povezanih podatkov.";
+        }
+    }
+
+    if (isset($_POST['sub'])) {
+        $novi_i = htmlspecialchars($_POST['ime'], ENT_QUOTES, 'UTF-8');
+        $novi_s = htmlspecialchars($_POST['sestavine'], ENT_QUOTES, 'UTF-8'); //-------- ' te znaki zrihtat ter update brez img ter kategorije
+        $novi_o = htmlspecialchars($_POST['opis'], ENT_QUOTES, 'UTF-8');
+        $novi_k_o = htmlspecialchars($_POST['kratek_opis'], ENT_QUOTES, 'UTF-8');
+        $novi_k = $_POST['kategorija'];
+        $novi_id = $_POST['id'];
 
         // Image upload handling
         $target_dir = "slike/izdelki/";
@@ -61,39 +91,45 @@ if (isset($_SESSION['log']) && isset($_SESSION['uporabnik_id'])) {
             if (move_uploaded_file($_FILES["slika"]["tmp_name"], $target_file)) {
 
                 // Insert into recepti table
-                $sql = "INSERT INTO recepti (ime, uporabnik_id, sestavine, opis, kratek_opis, kategorija_id) VALUES ('$i', '$uporabnik_id', '$s', '$o', '$k_o', '$k')";
+                $sql = "UPDATE recepti SET ime = '$novi_i', sestavine = '$novi_s', opis = '$novi_o', kratek_opis = '$novi_k_o', kategorija_id = '$novi_k'
+                        WHERE id = '$novi_id'";
                 if (mysqli_query($link, $sql)) {
-                    $recept_id = mysqli_insert_id($link);
-
-                    // Insert into slike table
                     $slika_ime = htmlspecialchars(basename($_FILES["slika"]["name"]));
-                    $sql = "INSERT INTO slike (ime, url, recept_id) VALUES ('$slika_ime', '$target_file', '$recept_id')";
+
+                    $sql_check = "SELECT id FROM slike WHERE recept_id = '$novi_id'";
+                    $result_check = mysqli_query($link, $sql_check);
+
+                    if (mysqli_num_rows($result_check) > 0) {
+                        $sql = "UPDATE slike SET ime = '$slika_ime', url = '$target_file' WHERE recept_id = '$novi_id'";
+                    } else {
+                        $sql = "INSERT INTO slike (ime, url, recept_id) VALUES ('$slika_ime', '$target_file', '$novi_id')";
+                    }
 
                     if (mysqli_query($link, $sql)) {
-                        $message = '<div class="success-msg">Recipe and image inserted successfully.</div>';
+                        $message = '<div class="success-msg">Recipe and image updated successfully.</div>';
+                        echo "<script>
+                            setTimeout(function() {
+                                window.location.href = 'your_recipes.php';
+                            }, 2000);
+                        </script>";
                     } else {
-                        $message = '<div class="error-msg">Insert image failed.</div>';
+                        $message = '<div class="error-msg">Update of image failed.</div>';
                     }
                 } else {
-                    $message = '<div class="error-msg">Recipe insertion failed.</div>';
+                    $message = '<div class="error-msg">Recipe update failed.</div>';
                 }
             } else {
                 $message = '<div class="error-msg">There was an error uploading the file.</div>';
             }
         }
-        echo "<script>
-                setTimeout(function() {
-                    window.location.href = 'login.php';
-                }, 2000);
-            </script>";
     }
 } else {
     // Display an error message if user is not logged in or uporabnik_id is missing
-    $message = '<div class="error-msg">You must be logged in to submit a recipe.</div>';
+    $message = '<div class="error-msg">You must be logged in to update a recipe.</div>';
     echo "<script>
             setTimeout(function() {
                 window.location.href = 'login.php';
-            }, 2000);
+            }, 100);
         </script>";
 }
 ?>
@@ -130,15 +166,16 @@ if (isset($_SESSION['log']) && isset($_SESSION['uporabnik_id'])) {
             </div>
 
             <div class="TitleNormal w-[314px] h-12 left-[252px] top-[207px] absolute">
-                <div class="HeaderNormal left-0 top-0 absolute text-white text-[32px] font-medium font-['Poppins'] capitalize">Submit your Recipe</div>
+                <div class="HeaderNormal left-0 top-0 absolute text-white text-[32px] font-medium font-['Poppins'] capitalize">Update your Recipe</div>
             </div>
             <div class="Form w-[736px] h-[917px] left-[607px] top-[264px] absolute">
-            <form action="#" method="post" enctype="multipart/form-data">  
+            <form action="#" method="post" enctype="multipart/form-data"> 
+                <input type="hidden" name="id" value="<?php echo htmlspecialchars($id); ?>"> 
                 <div class="TitleNormal w-[195px] h-9 left-0 top-0 absolute">
                     <div class="NameOfRecipe left-0 top-0 absolute text-white text-2xl font-medium font-['Poppins'] capitalize">Name of Recipe</div>
                 </div>
                 <div class="Frame427320862 w-[340px] h-10 left-0 top-[36px] absolute bg-white rounded-sm shadow border border-black">
-                    <input type="text" name="ime" class="Search w-[316px] h-[33px] left-[12px] top-[3px] absolute text-black/50 text-2xl font-medium font-['Poppins']" required>
+                    <input type="text" name="ime" value="<?php echo htmlspecialchars($ime); ?>" class="Search w-[316px] h-[33px] left-[12px] top-[3px] absolute text-black/50 text-2xl font-medium font-['Poppins']" required>
                 </div>
 
                 <div class="TitleNormal w-[212px] h-9 left-[396px] top-0 absolute">
@@ -147,8 +184,9 @@ if (isset($_SESSION['log']) && isset($_SESSION['uporabnik_id'])) {
                 <div class="Frame427320866 w-[340px] h-10 left-[396px] top-[36px] absolute bg-white rounded-sm shadow border border-black">
                     <select name="kategorija" class="Search w-[319px] h-[33px] left-[12px] top-[3px] absolute text-black/50 text-2xl font-medium font-['Poppins']" required>
                         <?php
-                            foreach ($categories as $row) {
-                                echo '<option value="'.$row['id'].'">'.htmlspecialchars($row['ime']).'</option>';
+                            foreach ($categories as $rowk) {
+                                $selected = ($rowk['id'] == $kategorija_id) ? 'selected' : '';
+                                echo '<option value="'.htmlspecialchars($rowk['id']).'" '.$selected.'>'.htmlspecialchars($rowk['ime']).'</option>';
                             }
                         ?>
                     </select>
@@ -158,14 +196,14 @@ if (isset($_SESSION['log']) && isset($_SESSION['uporabnik_id'])) {
                     <div class="Ingredients left-0 top-0 absolute text-white text-2xl font-medium font-['Poppins'] capitalize">Ingredients</div>
                 </div>
                 <div class="Frame427320863 w-[736px] h-[199px] left-0 top-[245px] absolute bg-white rounded-sm shadow border border-black">
-                    <textarea name="sestavine" class="Search w-[704px] h-[168px] left-[16px] top-[16px] absolute text-black/50 text-2xl font-medium font-['Poppins'] resize-none" required></textarea>
+                    <textarea name="sestavine" class="Search w-[704px] h-[168px] left-[16px] top-[16px] absolute text-black/50 text-2xl font-medium font-['Poppins'] resize-none" required><?php echo $s; ?></textarea>
                 </div>
                 
                 <div class="TitleNormal w-[124px] h-9 left-0 top-[464px] absolute">
                     <div class="Procedure left-0 top-0 absolute text-white text-2xl font-medium font-['Poppins'] capitalize">Procedure</div>
                 </div>
                 <div class="Frame427320864 w-[736px] h-[206px] left-0 top-[500px] absolute bg-white rounded-sm shadow border border-black">
-                    <textarea name="opis" class="Search w-[704px] h-[168px] left-[16px] top-[19px] absolute text-black/50 text-2xl font-medium font-['Poppins'] resize-none" required></textarea>
+                    <textarea name="opis" class="Search w-[704px] h-[168px] left-[16px] top-[19px] absolute text-black/50 text-2xl font-medium font-['Poppins'] resize-none" required><?php echo $o; ?></textarea>
                 </div>
 
                 <div class="TitleNormal w-[84px] h-9 left-0 top-[726px] absolute">
@@ -179,10 +217,10 @@ if (isset($_SESSION['log']) && isset($_SESSION['uporabnik_id'])) {
                     <div class="SmallDescription left-0 top-0 absolute text-white text-2xl font-medium font-['Poppins'] capitalize">Small Description</div>
                 </div>
                 <div class="Frame427320866 w-[736px] h-[57px] left-0 top-[132px] absolute bg-white rounded-sm shadow border border-black">
-                    <input type="text" name="kratek_opis" class="Search w-[704px] h-9 left-[16px] top-[11px] absolute text-black/50 text-2xl font-medium font-['Poppins']" required>
+                    <input type="text" name="kratek_opis" value="<?php echo htmlspecialchars($k_o); ?>" class="Search w-[704px] h-9 left-[16px] top-[11px] absolute text-black/50 text-2xl font-medium font-['Poppins']" required>
                 </div>
                 
-                <button type="submit" name="Pošlji" class="ButtonVariant2 w-[298px] h-[42px] px-5 py-2.5 left-[219px] top-[875px] absolute bg-[#ffd633] rounded-[100px] justify-between items-center inline-flex">
+                <button type="submit" name="sub" class="ButtonVariant2 w-[298px] h-[42px] px-5 py-2.5 left-[219px] top-[875px] absolute bg-[#ffd633] rounded-[100px] justify-between items-center inline-flex">
                     <img class="Yummies2 w-[30px] h-[30px] rounded-[30.48px]" src="../slike/button-logo.png" alt="button-logo"/>
                     <div class="Button text-[#010012] text-xl font-normal font-['Poppins'] capitalize">Submit</div>
                     <div class="ArrowForward w-6 h-6 relative">
@@ -203,16 +241,16 @@ if (isset($_SESSION['log']) && isset($_SESSION['uporabnik_id'])) {
         <div class="Form w-[232px] h-[598px] left-[64px] top-[188px] absolute">
         <form action="#" method="post" enctype="multipart/form-data"> 
             <div class="Frame427320864 w-[232px] h-[40.94px] left-0 top-[40px] absolute bg-white rounded-sm shadow border border-black">
-              <input type="text" name="ime" class="Search w-[220.99px] h-[25.41px] left-[6px] top-[7px] absolute text-black/50 text-xl font-medium font-['Poppins']" required>
+              <input type="text" name="ime" value="<?php echo htmlspecialchars($ime); ?>" class="Search w-[220.99px] h-[25.41px] left-[6px] top-[7px] absolute text-black/50 text-xl font-medium font-['Poppins']" required>
             </div>
             <div class="Frame427320865 w-[232px] h-[40.94px] left-0 top-[131px] absolute bg-white rounded-sm shadow border border-black">
-              <input type="text" name="kratek_opis" class="Search w-[220.99px] h-[25.41px] left-[6px] top-[7px] absolute text-black/50 text-xl font-medium font-['Poppins']" required>
+              <input type="text" name="kratek_opis" value="<?php echo htmlspecialchars($k_o); ?>" class="Search w-[220.99px] h-[25.41px] left-[6px] top-[7px] absolute text-black/50 text-xl font-medium font-['Poppins']" required>
             </div>
             <div class="Frame427320866 w-[232px] h-[40.94px] left-0 top-[222px] absolute bg-white rounded-sm shadow border border-black">
-              <textarea name="sestavine" class="Search w-[220.99px] h-[25.41px] left-[6px] top-[7px] absolute text-black/50 text-xl font-medium font-['Poppins'] resize-none" required></textarea>
+              <textarea name="sestavine" class="Search w-[220.99px] h-[25.41px] left-[6px] top-[7px] absolute text-black/50 text-xl font-medium font-['Poppins'] resize-none" required><?php echo $s; ?></textarea>
             </div>
             <div class="Frame427320867 w-[232px] h-[40.94px] left-0 top-[313px] absolute bg-white rounded-sm shadow border border-black">
-              <textarea name="opis" class="Search w-[220.99px] h-[25.41px] left-[6px] top-[7px] absolute text-black/50 text-xl font-medium font-['Poppins'] resize-none" required></textarea>
+              <textarea name="opis" class="Search w-[220.99px] h-[25.41px] left-[6px] top-[7px] absolute text-black/50 text-xl font-medium font-['Poppins'] resize-none" required><?php echo $o; ?></textarea>
             </div>
             <div class="Frame427320868 w-[232px] h-[40.94px] left-0 top-[404px] absolute bg-white rounded-sm shadow border border-black">
               <input type="file" name="slika" class="Search w-[220.99px] h-[25px] left-[6px] top-[5px] absolute text-black/50 text-xl font-medium font-['Poppins']" required>
@@ -221,7 +259,8 @@ if (isset($_SESSION['log']) && isset($_SESSION['uporabnik_id'])) {
               <select name="kategorija" class="Search w-[218px] h-[25px] left-[6px] top-[7px] absolute text-black/50 text-xl font-medium font-['Poppins']" required>
                 <?php
                     foreach ($categories as $row) {
-                        echo '<option value="'.$row['id'].'">'.htmlspecialchars($row['ime']).'</option>';
+                        $selected = ($row['id'] == $kategorija_id) ? 'selected' : '';
+                        echo '<option value="'.$row['id'].'" '.$selected.'>'.htmlspecialchars($row['ime']).'</option>';
                     }
                 ?>
               </select>

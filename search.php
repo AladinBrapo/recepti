@@ -153,9 +153,9 @@ if (isset($_POST['search']) || isset($_POST['cuisine']) || isset($_GET['cuisine'
                   }
                   echo '<div class="Item w-[215px] h-[381px] left-['.$x.'px] top-['.$y.'] absolute flex-col justify-center items-center gap-3.5 inline-flex">
                           <a href="item.php?id='.$row['id'].'" style="text-decoration:none;">
-                            <img src="'.$row['url'].'" alt="'.$row['alt'].'" class="Images w-full max-w-[215px] max-h-[215px] aspect-square left-0 top-0 absolute bg-[#c4c4c4] rounded-[10px]">
-                            <div class="Title w-[185px] left-[15px] top-[229px] absolute text-[#fefefe] text-xl font-bold font-['.'Poppins'.']">' . $row['recept'] . '</div>
-                            <div class="Description w-[185px] left-[15px] top-[333px] absolute text-[#fefefe] text-base font-normal font-['.'Poppins'.']">' . $row['kratek_opis'] . '</div>
+                            <img src="'.$row['url'].'" alt="'.$row['alt'].'" class="Images w-52 h-52 left-0 top-0 object-cover absolute rounded-lg">
+                            <div class="Title w-[185px] left-[15px] top-[225px] absolute text-[#fefefe] text-xl font-bold font-['.'Poppins'.']">' . $row['recept'] . '</div>
+                            <div class="Description w-[185px] left-[15px] top-[300px] absolute text-[#fefefe] text-base font-normal font-['.'Poppins'.']">' . $row['kratek_opis'] . '</div>
                           </a>
                         </div>';
                   $x=$x + 240;
@@ -181,7 +181,7 @@ if (isset($_POST['search']) || isset($_POST['cuisine']) || isset($_GET['cuisine'
                     <img src="slike/search.png" alt="search">
                 </button>
 
-                <div class="cuisine-buttons w-[712px] h-[42px] left-[455px] top-[9px] absolute flex gap-3">
+                <div class="cuisine-buttons w-[770px] h-[42px] left-[455px] top-[9px] absolute flex gap-3">
                     <input type="radio" id="italian" name="cuisine" value="Italian" class="hidden" />
                     <label for="italian" class="ButtonVariant1 w-[92px] h-[42px] rounded-[100px] border border-[#fefefe] flex items-center justify-center cursor-pointer"> 
                         <span class="text-[#fefefe] text-xl font-normal font-['Poppins'] capitalize">Italian</span>
@@ -210,6 +210,11 @@ if (isset($_POST['search']) || isset($_POST['cuisine']) || isset($_GET['cuisine'
                     <input type="radio" id="american" name="cuisine" value="American" class="hidden" />
                     <label for="american" class="ButtonVariant1 w-[115px] h-[42px] rounded-[100px] border border-[#fefefe] flex items-center justify-center cursor-pointer">
                         <span class="text-[#fefefe] text-lg font-normal font-['Poppins'] capitalize">American</span>
+                    </label>
+                    
+                    <input type="radio" id="clear" name="cuisine" value="" class="hidden" />
+                    <label for="clear" class="ButtonVariant1 w-[42px] h-[42px] rounded-[100px] border border-[#fefefe] flex items-center justify-center cursor-pointer">
+                        <span class="text-[#fefefe] text-xl font-normal font-['Poppins']">X</span>
                     </label>
                 </div>
               </form>
@@ -284,6 +289,11 @@ if (isset($_POST['search']) || isset($_POST['cuisine']) || isset($_GET['cuisine'
             <label for="american_p" class="ButtonVariant1 w-[115px] h-[42px] px-5 left-[150px] top-[303px] absolute rounded-[100px] border border-[#fefefe] flex items-center justify-center">
                 <span class="American text-[#fefefe] text-lg font-normal font-['Poppins'] capitalize">American</span>
             </label>
+            
+            <input type="radio" id="clear_p" name="cuisine" value="" class="hidden" />
+            <label for="clear_p" class="ButtonVariant1 w-[42px] h-[42px] px-5 left-[276px] top-[303px] absolute rounded-[100px] border border-[#fefefe] flex items-center justify-center">
+                <span class="text-[#fefefe] text-lg font-normal font-['Poppins']">X</span>
+            </label>
         </form>
         
         <?php
@@ -293,9 +303,9 @@ if (isset($_POST['search']) || isset($_POST['cuisine']) || isset($_GET['cuisine'
             while ($row = mysqli_fetch_array($result_mobile)) {
               echo '<div class="Item w-[270px] h-[381px] left-[45px] top-['.$y.'px] absolute">
                       <a href="item.php?id='.$row['id'].'" style="text-decoration:none;">
-                        <img src="'.$row['url'].'" alt="'.$row['alt'].'" class="Images w-full max-w-[270px] max-h-[215px] aspect-square left-0 top-0 absolute bg-[#c4c4c4] rounded-[10px]">
-                        <div class="Title w-[232.33px] left-[18.84px] top-[229px] absolute text-[#fefefe] text-xl font-bold font-['.'Poppins'.']">' . $row['recept'] . '</div>
-                        <div class="Description w-[232.33px] left-[18.84px] top-[333px] absolute text-[#fefefe] text-base font-normal font-['.'Poppins'.']">' . $row['kratek_opis'] . '</div>
+                        <img src="'.$row['url'].'" alt="'.$row['alt'].'" class="Images w-[270px] h-[215px] object-cover rounded-lg">
+                        <div class="Title w-[232.33px] left-[18.84px] top-[225px] absolute text-[#fefefe] text-xl font-bold font-['.'Poppins'.']">' . $row['recept'] . '</div>
+                        <div class="Description w-[232.33px] left-[18.84px] top-[300px] absolute text-[#fefefe] text-base font-normal font-['.'Poppins'.']">' . $row['kratek_opis'] . '</div>
                       </a>
                     </div>';
               $y=$y + 400;

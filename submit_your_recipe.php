@@ -18,12 +18,12 @@ while ($row = mysqli_fetch_array($resultk)) {
 if (isset($_SESSION['log']) && isset($_SESSION['uporabnik_id'])) {
     $uporabnik_id = $_SESSION['uporabnik_id'];
 
-    if (isset($_POST['Pošlji'])) {
-        $i = $_POST['ime'];
-        $s = $_POST['sestavine'];
-        $o = $_POST['opis'];
-        $k_o = $_POST['kratek_opis'];
-        $k = $_POST['kategorija'];
+    if (isset($_POST['Po分lji'])) {
+        $i = htmlspecialchars($_POST['ime'], ENT_QUOTES, 'UTF-8');
+        $s = htmlspecialchars($_POST['sestavine'], ENT_QUOTES, 'UTF-8');
+        $o = htmlspecialchars($_POST['opis'], ENT_QUOTES, 'UTF-8');
+        $k_o = htmlspecialchars($_POST['kratek_opis'], ENT_QUOTES, 'UTF-8');
+        $k = htmlspecialchars($_POST['kategorija']);
 
         // Image upload handling
         $target_dir = "slike/izdelki/";
@@ -81,11 +81,6 @@ if (isset($_SESSION['log']) && isset($_SESSION['uporabnik_id'])) {
                 $message = '<div class="error-msg">There was an error uploading the file.</div>';
             }
         }
-        echo "<script>
-                setTimeout(function() {
-                    window.location.href = 'login.php';
-                }, 2000);
-            </script>";
     }
 } else {
     // Display an error message if user is not logged in or uporabnik_id is missing
@@ -138,9 +133,9 @@ if (isset($_SESSION['log']) && isset($_SESSION['uporabnik_id'])) {
                     <div class="NameOfRecipe left-0 top-0 absolute text-white text-2xl font-medium font-['Poppins'] capitalize">Name of Recipe</div>
                 </div>
                 <div class="Frame427320862 w-[340px] h-10 left-0 top-[36px] absolute bg-white rounded-sm shadow border border-black">
-                    <input type="text" name="ime" class="Search w-[316px] h-[33px] left-[12px] top-[3px] absolute text-black/50 text-2xl font-medium font-['Poppins']" required>
+                    <input type="text" name="ime" value="<?php echo isset($_POST['ime']) ? htmlspecialchars($_POST['ime'], ENT_QUOTES, 'UTF-8') : ''; ?>" class="Search w-[316px] h-[33px] left-[12px] top-[3px] absolute text-black/50 text-2xl font-medium font-['Poppins']" required>
                 </div>
-
+            
                 <div class="TitleNormal w-[212px] h-9 left-[396px] top-0 absolute">
                     <div class="Category left-0 top-0 absolute text-white text-2xl font-medium font-['Poppins'] capitalize">Category</div>
                 </div>
@@ -148,26 +143,27 @@ if (isset($_SESSION['log']) && isset($_SESSION['uporabnik_id'])) {
                     <select name="kategorija" class="Search w-[319px] h-[33px] left-[12px] top-[3px] absolute text-black/50 text-2xl font-medium font-['Poppins']" required>
                         <?php
                             foreach ($categories as $row) {
-                                echo '<option value="'.$row['id'].'">'.htmlspecialchars($row['ime']).'</option>';
+                                $selected = (isset($_POST['kategorija']) && $_POST['kategorija'] == $row['id']) ? 'selected' : '';
+                                echo '<option value="'.$row['id'].'" '.$selected.'>'.htmlspecialchars($row['ime']).'</option>';
                             }
                         ?>
                     </select>
                 </div>
-
+            
                 <div class="TitleNormal w-[137px] h-9 left-0 top-[209px] absolute">
                     <div class="Ingredients left-0 top-0 absolute text-white text-2xl font-medium font-['Poppins'] capitalize">Ingredients</div>
                 </div>
                 <div class="Frame427320863 w-[736px] h-[199px] left-0 top-[245px] absolute bg-white rounded-sm shadow border border-black">
-                    <textarea name="sestavine" class="Search w-[704px] h-[168px] left-[16px] top-[16px] absolute text-black/50 text-2xl font-medium font-['Poppins'] resize-none" required></textarea>
+                    <textarea name="sestavine" class="Search w-[704px] h-[168px] left-[16px] top-[16px] absolute text-black/50 text-2xl font-medium font-['Poppins'] resize-none overflow-auto" rows="20" required><?php echo isset($_POST['sestavine']) ? htmlspecialchars($_POST['sestavine'], ENT_QUOTES, 'UTF-8') : ''; ?></textarea>
                 </div>
                 
                 <div class="TitleNormal w-[124px] h-9 left-0 top-[464px] absolute">
                     <div class="Procedure left-0 top-0 absolute text-white text-2xl font-medium font-['Poppins'] capitalize">Procedure</div>
                 </div>
                 <div class="Frame427320864 w-[736px] h-[206px] left-0 top-[500px] absolute bg-white rounded-sm shadow border border-black">
-                    <textarea name="opis" class="Search w-[704px] h-[168px] left-[16px] top-[19px] absolute text-black/50 text-2xl font-medium font-['Poppins'] resize-none" required></textarea>
+                    <textarea name="opis" class="Search w-[704px] h-[168px] left-[16px] top-[19px] absolute text-black/50 text-2xl font-medium font-['Poppins'] resize-none overflow-auto" rows="12" required><?php echo isset($_POST['opis']) ? htmlspecialchars($_POST['opis'], ENT_QUOTES, 'UTF-8') : ''; ?></textarea>
                 </div>
-
+            
                 <div class="TitleNormal w-[84px] h-9 left-0 top-[726px] absolute">
                     <div class="Picture left-0 top-0 absolute text-white text-2xl font-medium font-['Poppins'] capitalize">Picture</div>
                 </div>
@@ -179,10 +175,10 @@ if (isset($_SESSION['log']) && isset($_SESSION['uporabnik_id'])) {
                     <div class="SmallDescription left-0 top-0 absolute text-white text-2xl font-medium font-['Poppins'] capitalize">Small Description</div>
                 </div>
                 <div class="Frame427320866 w-[736px] h-[57px] left-0 top-[132px] absolute bg-white rounded-sm shadow border border-black">
-                    <input type="text" name="kratek_opis" class="Search w-[704px] h-9 left-[16px] top-[11px] absolute text-black/50 text-2xl font-medium font-['Poppins']" required>
+                    <input type="text" name="kratek_opis" value="<?php echo isset($_POST['kratek_opis']) ? htmlspecialchars($_POST['kratek_opis'], ENT_QUOTES, 'UTF-8') : ''; ?>" class="Search w-[704px] h-9 left-[16px] top-[11px] absolute text-black/50 text-2xl font-medium font-['Poppins']" required>
                 </div>
                 
-                <button type="submit" name="Pošlji" class="ButtonVariant2 w-[298px] h-[42px] px-5 py-2.5 left-[219px] top-[875px] absolute bg-[#ffd633] rounded-[100px] justify-between items-center inline-flex">
+                <button type="submit" name="Po分lji" class="ButtonVariant2 w-[298px] h-[42px] px-5 py-2.5 left-[219px] top-[875px] absolute bg-[#ffd633] rounded-[100px] justify-between items-center inline-flex">
                     <img class="Yummies2 w-[30px] h-[30px] rounded-[30.48px]" src="../slike/button-logo.png" alt="button-logo"/>
                     <div class="Button text-[#010012] text-xl font-normal font-['Poppins'] capitalize">Submit</div>
                     <div class="ArrowForward w-6 h-6 relative">
@@ -192,6 +188,7 @@ if (isset($_SESSION['log']) && isset($_SESSION['uporabnik_id'])) {
                     </div>
                 </button>
             </form>
+
     
             </div>
         </div>
@@ -234,7 +231,7 @@ if (isset($_SESSION['log']) && isset($_SESSION['uporabnik_id'])) {
             <div class="Picture w-[88px] left-0 top-[364px] absolute text-[#fefefe] text-xl font-normal font-['Poppins'] capitalize">Picture</div>
             <div class="Category w-[184px] left-0 top-[455px] absolute text-[#fefefe] text-xl font-normal font-['Poppins'] capitalize">Category</div>
             
-            <button type="submit" name="Pošlji" class="PhoneButtonVariant2 w-[141.75px] h-[42px] px-[9.51px] py-[4.76px] left-[44px] top-[556px] absolute bg-[#ffd633] rounded-[10.50px] flex items-center justify-center">
+            <button type="submit" name="Po分lji" class="PhoneButtonVariant2 w-[141.75px] h-[42px] px-[9.51px] py-[4.76px] left-[44px] top-[556px] absolute bg-[#ffd633] rounded-[10.50px] flex items-center justify-center">
               <div class="Button text-center text-[#010012] text-sm font-normal font-['Poppins'] capitalize">Submit</div>
             </butto>
         </form>
