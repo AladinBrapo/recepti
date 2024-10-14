@@ -48,7 +48,7 @@
                 if (isset($_SESSION['log'])) {
                     $i = $_SESSION['im'];
                     $p = $_SESSION['pr'];
-                    echo '<a href="logout.php" class="BoundingBox w-[35px] h-[35px] left-0.5 top-0.5 absolute bg-[#99431f]">
+                    echo '<a href="your_recipes.php" class="BoundingBox w-[35px] h-[35px] left-0.5 top-0.5 absolute bg-[#99431f]">
                             <img src="../slike/account_circle.png" alt="user-circle">
                         </a>'; 
                 } else {
