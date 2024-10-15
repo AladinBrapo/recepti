@@ -139,9 +139,11 @@ if (isset($_SESSION['log']) && isset($_SESSION['uporabnik_id'])) {
             </div>
         <?php endif; ?>
         <?php
+            $y=242;
+            
             while ($row = mysqli_fetch_array($result_mobile)) {
                 echo '
-                <div class="Group28 w-[270px] h-[338px] left-[45px] top-[242px] absolute">
+                <div class="Group28 w-[270px] h-[338px] left-[45px] top-['.$y.'px] absolute">
                     <div>
                         <img src="'. htmlspecialchars($row['slika_url']) .'" alt=" '. htmlspecialchars($row['slika_alt']) .'" class="Images object-cover w-[270px] h-[215px] left-0 top-0 absolute bg-[#c4c4c4] rounded-[10px]">
                     </div>
@@ -160,6 +162,7 @@ if (isset($_SESSION['log']) && isset($_SESSION['uporabnik_id'])) {
                         </button>
                     </form>
                 </div>';
+                $y=$y + 380;
             }
         ?>
         <div class="TitleNormal w-[152px] h-[34px] left-[104px] top-[88px] absolute">

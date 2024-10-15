@@ -191,7 +191,7 @@ if (isset($_SESSION['log']) && isset($_SESSION['uporabnik_id'])) {
                     <select name="kategorija" class="Search w-[319px] h-[33px] left-[12px] top-[3px] absolute text-black/50 text-2xl font-medium font-['Poppins']" required>
                         <?php
                             foreach ($categories as $rowk) {
-                                $selected = ($rowk['id'] == $kategorija_id) ? 'selected' : '';
+                                $selected = ($rowk['id'] == $k) ? 'selected' : '';
                                 echo '<option value="'.htmlspecialchars($rowk['id']).'" '.$selected.'>'.htmlspecialchars($rowk['ime']).'</option>';
                             }
                         ?>
@@ -265,7 +265,7 @@ if (isset($_SESSION['log']) && isset($_SESSION['uporabnik_id'])) {
               <select name="kategorija" class="Search w-[218px] h-[25px] left-[6px] top-[7px] absolute text-black/50 text-xl font-medium font-['Poppins']" required>
                 <?php
                     foreach ($categories as $row) {
-                        $selected = ($row['id'] == $kategorija_id) ? 'selected' : '';
+                        $selected = ($row['id'] == $k) ? 'selected' : '';
                         echo '<option value="'.$row['id'].'" '.$selected.'>'.htmlspecialchars($row['ime']).'</option>';
                     }
                 ?>
