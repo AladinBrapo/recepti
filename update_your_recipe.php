@@ -49,62 +49,69 @@ if (isset($_SESSION['log']) && isset($_SESSION['uporabnik_id'])) {
 
     if (isset($_POST['sub'])) {
         $novi_i = htmlspecialchars($_POST['ime'], ENT_QUOTES, 'UTF-8');
-        $novi_s = htmlspecialchars($_POST['sestavine'], ENT_QUOTES, 'UTF-8'); //-------- ' te znaki zrihtat ter update brez img ter kategorije
+        $novi_s = htmlspecialchars($_POST['sestavine'], ENT_QUOTES, 'UTF-8');
         $novi_o = htmlspecialchars($_POST['opis'], ENT_QUOTES, 'UTF-8');
         $novi_k_o = htmlspecialchars($_POST['kratek_opis'], ENT_QUOTES, 'UTF-8');
         $novi_k = $_POST['kategorija'];
         $novi_id = $_POST['id'];
-
-        // Image upload handling
-        $target_dir = "slike/izdelki/";
-        $target_file = $target_dir . basename($_FILES["slika"]["name"]);
-        $uploadOk = 1;
-        $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-
-        // Check if image file is an actual image or fake image
-        $check = getimagesize($_FILES["slika"]["tmp_name"]);
-        if ($check === false) {
-            $message = '<div class="error-msg">The file is not an image.</div>';
-            $uploadOk = 0;
+    
+        // Update text fields in recepti table
+        $sql = "UPDATE recepti SET ime = '$novi_i', sestavine = '$novi_s', opis = '$novi_o', kratek_opis = '$novi_k_o', kategorija_id = '$novi_k' WHERE id = '$novi_id'";
+    
+        if (!mysqli_query($link, $sql)) {
+            $message = '<div class="error-msg">Recipe update failed.</div>';
+        } else {
+            $message = '<div class="success-msg">Recipe updated successfully.</div>';
+            echo "<script>
+                    setTimeout(function() {
+                        window.location.href = 'your_recipes.php';
+                    }, 2000);
+                </script>";
         }
-
-        // Check if file already exists
-        if (file_exists($target_file)) {
-            $message = '<div class="error-msg">This file already exists.</div>';
-            $uploadOk = 0;
-        }
-
-        // Check file size
-        if ($_FILES["slika"]["size"] > 500000) {
-            $message = '<div class="error-msg">The file is too big.</div>';
-            $uploadOk = 0;
-        }
-
-        // Allow certain file formats
-        if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif" ) {
-            $message = '<div class="error-msg">Only JPG, JPEG, PNG & GIF are allowed.</div>';
-            $uploadOk = 0;
-        }
-
-        // If image checks pass, proceed with upload and insert recipe
-        if ($uploadOk == 1) {
-            if (move_uploaded_file($_FILES["slika"]["tmp_name"], $target_file)) {
-
-                // Insert into recepti table
-                $sql = "UPDATE recepti SET ime = '$novi_i', sestavine = '$novi_s', opis = '$novi_o', kratek_opis = '$novi_k_o', kategorija_id = '$novi_k'
-                        WHERE id = '$novi_id'";
-                if (mysqli_query($link, $sql)) {
+    
+        // Check if an image was uploaded
+        if (!empty($_FILES["slika"]["name"])) {
+            $target_dir = "slike/izdelki/";
+            $target_file = $target_dir . basename($_FILES["slika"]["name"]);
+            $uploadOk = 1;
+            $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+    
+            // Validate image file
+            $check = getimagesize($_FILES["slika"]["tmp_name"]);
+            if ($check === false) {
+                $message = '<div class="error-msg">The file is not an image.</div>';
+                $uploadOk = 0;
+            }
+    
+            if (file_exists($target_file)) {
+                $message = '<div class="error-msg">This file already exists.</div>';
+                $uploadOk = 0;
+            }
+    
+            if ($_FILES["slika"]["size"] > 500000) {
+                $message = '<div class="error-msg">The file is too big.</div>';
+                $uploadOk = 0;
+            }
+    
+            if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif" ) {
+                $message = '<div class="error-msg">Only JPG, JPEG, PNG & GIF are allowed.</div>';
+                $uploadOk = 0;
+            }
+    
+            // If image checks pass, upload and update database
+            if ($uploadOk == 1) {
+                if (move_uploaded_file($_FILES["slika"]["tmp_name"], $target_file)) {
                     $slika_ime = htmlspecialchars(basename($_FILES["slika"]["name"]));
-
+    
                     $sql_check = "SELECT id FROM slike WHERE recept_id = '$novi_id'";
                     $result_check = mysqli_query($link, $sql_check);
-
+    
                     if (mysqli_num_rows($result_check) > 0) {
                         $sql = "UPDATE slike SET ime = '$slika_ime', url = '$target_file' WHERE recept_id = '$novi_id'";
                     } else {
                         $sql = "INSERT INTO slike (ime, url, recept_id) VALUES ('$slika_ime', '$target_file', '$novi_id')";
                     }
-
+    
                     if (mysqli_query($link, $sql)) {
                         $message = '<div class="success-msg">Recipe and image updated successfully.</div>';
                         echo "<script>
@@ -116,13 +123,12 @@ if (isset($_SESSION['log']) && isset($_SESSION['uporabnik_id'])) {
                         $message = '<div class="error-msg">Update of image failed.</div>';
                     }
                 } else {
-                    $message = '<div class="error-msg">Recipe update failed.</div>';
+                    $message = '<div class="error-msg">There was an error uploading the file.</div>';
                 }
-            } else {
-                $message = '<div class="error-msg">There was an error uploading the file.</div>';
             }
         }
     }
+
 } else {
     // Display an error message if user is not logged in or uporabnik_id is missing
     $message = '<div class="error-msg">You must be logged in to update a recipe.</div>';
@@ -210,7 +216,7 @@ if (isset($_SESSION['log']) && isset($_SESSION['uporabnik_id'])) {
                     <div class="Picture left-0 top-0 absolute text-white text-2xl font-medium font-['Poppins'] capitalize">Picture</div>
                 </div>
                 <div class="Frame427320865 w-[736px] h-[57px] left-0 top-[762px] absolute bg-white rounded-sm shadow border border-black">
-                    <input type="file" name="slika" class="Search w-[704px] h-[40px] left-[16px] top-[10px] absolute text-black/50 text-2xl font-medium font-['Poppins']" required>
+                    <input type="file" name="slika" class="Search w-[704px] h-[40px] left-[16px] top-[10px] absolute text-black/50 text-2xl font-medium font-['Poppins']">
                 </div>
                 
                 <div class="TitleNormal w-[212px] h-9 left-0 top-[96px] absolute">
@@ -253,7 +259,7 @@ if (isset($_SESSION['log']) && isset($_SESSION['uporabnik_id'])) {
               <textarea name="opis" class="Search w-[220.99px] h-[25.41px] left-[6px] top-[7px] absolute text-black/50 text-xl font-medium font-['Poppins'] resize-none" required><?php echo $o; ?></textarea>
             </div>
             <div class="Frame427320868 w-[232px] h-[40.94px] left-0 top-[404px] absolute bg-white rounded-sm shadow border border-black">
-              <input type="file" name="slika" class="Search w-[220.99px] h-[25px] left-[6px] top-[5px] absolute text-black/50 text-xl font-medium font-['Poppins']" required>
+              <input type="file" name="slika" class="Search w-[220.99px] h-[25px] left-[6px] top-[5px] absolute text-black/50 text-xl font-medium font-['Poppins']">
             </div>
             <div class="Frame427320869 w-[232px] h-[40.94px] left-0 top-[495px] absolute bg-white rounded-sm shadow border border-black">
               <select name="kategorija" class="Search w-[218px] h-[25px] left-[6px] top-[7px] absolute text-black/50 text-xl font-medium font-['Poppins']" required>
