@@ -146,12 +146,12 @@ if (isset($_POST['search']) || isset($_POST['cuisine']) || isset($_GET['cuisine'
                 $count=0;
 
                 while ($row = mysqli_fetch_array($result)) {
-                  if($count == 5){
+                  if($count == 6){
                     $x=0;
                     $y=$y + 409;
                     $count=0;
                   }
-                  echo '<div class="Item w-[215px] h-[381px] left-['.$x.'px] top-['.$y.'] absolute flex-col justify-center items-center gap-3.5 inline-flex">
+                  echo '<div class="Item w-[215px] h-[381px] left-['.$x.'px] top-['.$y.'px] absolute flex-col justify-center items-center gap-3.5 inline-flex">
                           <a href="item.php?id='.$row['id'].'" style="text-decoration:none;">
                             <img src="'.$row['url'].'" alt="'.$row['alt'].'" class="Images w-52 h-52 left-0 top-0 object-cover absolute rounded-lg">
                             <div class="Title w-[185px] left-[15px] top-[225px] absolute text-[#fefefe] text-xl font-bold font-['.'Poppins'.']">' . $row['recept'] . '</div>
@@ -159,6 +159,7 @@ if (isset($_POST['search']) || isset($_POST['cuisine']) || isset($_GET['cuisine'
                           </a>
                         </div>';
                   $x=$x + 240;
+                  $count=$count+1;
                 }
                 echo '</div>';
               }else{
