@@ -25,6 +25,14 @@
     $row = mysqli_fetch_array($result);
     $average_rating = round($row['average_rating'], 1);
     
+    $userId = $_SESSION['uporabnik_id'];
+    $userRatingSql = "SELECT ocena FROM ocene WHERE recept_id = $recept_id AND uporabnik_id = $userId";
+    $userRatingResult = mysqli_query($link, $userRatingSql);
+    $userRating = mysqli_num_rows($userRatingResult) ? mysqli_fetch_assoc($userRatingResult)['ocena'] : 0;
+    
+    echo "<script>var currentRating = " . $userRating . ";</script>";
+
+    
     echo "<script>var isLoggedIn = " . (isset($_SESSION['log']) ? 'true' : 'false') . ";</script>";
 ?>
 <!DOCTYPE html>
@@ -142,58 +150,61 @@
   </div>
   <script src="js/phone-menu.js"></script>
     <script>
-        var currentRating = 0; // Store current rating
+    //var currentRating = 0; // Store current rating from PHP (set below)
 
-        // Add event listeners to each star
-        document.querySelectorAll('.star').forEach(star => {
-            star.addEventListener('click', function() {
-                if (!isLoggedIn) {
-                    alert("You must be logged in to rate a recipe.");
-                    return;
-                }
-        
-                currentRating = this.dataset.rating; // Set current rating based on the clicked star
-                highlightStars(currentRating); // Highlight stars up to the clicked one
-            });
-        
-            star.addEventListener('mouseover', function() {
-                highlightStars(this.dataset.rating); // Highlight stars up to the hovered one
-            });
-        
-            star.addEventListener('mouseout', function() {
-                highlightStars(currentRating); // Return to the selected rating when not hovering
-            });
-        });
-        
-        // Function to highlight stars based on the rating
-        function highlightStars(rating) {
-            document.querySelectorAll('.star').forEach(star => {
-                star.src = (star.dataset.rating <= rating) ? 'slike/star-filled.png' : 'slike/star.png'; // Highlight the selected rating stars
-            });
-        }
-        
-        // Initialize all stars to be empty on page load
-        highlightStars(currentRating);
-        
-        // Submit rating when the submit button is clicked
-        function oceniRecept(receptId) {
-            if (currentRating === 0) {
-                alert("Please select a rating before submitting.");
+    // Add event listeners to each star
+    document.querySelectorAll('.star').forEach(star => {
+        star.addEventListener('click', function() {
+            if (!isLoggedIn) {
+                alert("You must be logged in to rate a recipe.");
                 return;
             }
-        
-            // Send rating to the server using AJAX
-            const xhr = new XMLHttpRequest();
-            xhr.open("POST", "submit_rating.php", true);
-            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                    alert("Rating submitted successfully!");
-                }
-            };
-            xhr.send("recept_id=" + receptId + "&rating=" + currentRating);
+    
+            currentRating = this.dataset.rating; // Set current rating based on the clicked star
+            highlightStars(currentRating); // Highlight stars up to the clicked one
+        });
+    
+        star.addEventListener('mouseover', function() {
+            highlightStars(this.dataset.rating); // Highlight stars up to the hovered one
+        });
+    
+        star.addEventListener('mouseout', function() {
+            highlightStars(currentRating); // Return to the selected rating when not hovering
+        });
+    });
+    
+    // Function to highlight stars based on the rating
+    function highlightStars(rating) {
+        document.querySelectorAll('.star').forEach(star => {
+            star.src = (star.dataset.rating <= rating) ? 'slike/star-filled.png' : 'slike/star.png'; // Highlight the selected rating stars
+        });
+    }
+
+    // Initialize stars based on previous rating after DOM loads
+    document.addEventListener("DOMContentLoaded", function() {
+        highlightStars(currentRating); // Highlights stars based on previous rating
+    });
+
+    // Submit rating when the submit button is clicked
+    function oceniRecept(receptId) {
+        if (currentRating === 0) {
+            alert("Please select a rating before submitting.");
+            return;
         }
-    </script>
+
+        // Send rating to the server using AJAX
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "submit_rating.php", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                alert("Rating submitted successfully!");
+            }
+        };
+        xhr.send("recept_id=" + receptId + "&rating=" + currentRating);
+    }
+</script>
+
 
 </body>
 </html>

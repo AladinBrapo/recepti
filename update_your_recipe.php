@@ -216,7 +216,7 @@ if (isset($_SESSION['log']) && isset($_SESSION['uporabnik_id'])) {
                     <div class="Picture left-0 top-0 absolute text-white text-2xl font-medium font-['Poppins'] capitalize">Picture</div>
                 </div>
                 <div class="Frame427320865 w-[736px] h-[57px] left-0 top-[762px] absolute bg-white rounded-sm shadow border border-black">
-                    <input type="file" name="slika" class="Search w-[704px] h-[40px] left-[16px] top-[10px] absolute text-black/50 text-2xl font-medium font-['Poppins']">
+                    <input type="file" name="slika" accept="image/*" class="Search w-[704px] h-[40px] left-[16px] top-[10px] absolute text-black/50 text-2xl font-medium font-['Poppins']">
                 </div>
                 
                 <div class="TitleNormal w-[212px] h-9 left-0 top-[96px] absolute">
@@ -259,7 +259,7 @@ if (isset($_SESSION['log']) && isset($_SESSION['uporabnik_id'])) {
               <textarea name="opis" class="Search w-[220.99px] h-[25.41px] left-[6px] top-[7px] absolute text-black/50 text-xl font-medium font-['Poppins'] resize-none" required><?php echo $o; ?></textarea>
             </div>
             <div class="Frame427320868 w-[232px] h-[40.94px] left-0 top-[404px] absolute bg-white rounded-sm shadow border border-black">
-              <input type="file" name="slika" class="Search w-[220.99px] h-[25px] left-[6px] top-[5px] absolute text-black/50 text-xl font-medium font-['Poppins']">
+              <input type="file" name="slika" accept="image/*" class="Search w-[220.99px] h-[25px] left-[6px] top-[5px] absolute text-black/50 text-xl font-medium font-['Poppins']">
             </div>
             <div class="Frame427320869 w-[232px] h-[40.94px] left-0 top-[495px] absolute bg-white rounded-sm shadow border border-black">
               <select name="kategorija" class="Search w-[218px] h-[25px] left-[6px] top-[7px] absolute text-black/50 text-xl font-medium font-['Poppins']" required>
