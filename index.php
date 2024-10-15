@@ -9,13 +9,47 @@
     <link rel="icon" href="../slike/yummies-logo.png" type="image/png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="css/main.css">
+
+    <style>
+      @keyframes slideInFromLeft {
+          from { transform: translateX(-100%); }
+          to { transform: translateX(0); }
+      }
+
+      @keyframes slideInFromRight {
+          from { transform: translateX(100%); }
+          to { transform: translateX(0); }
+      }
+
+      @keyframes scrollUp {
+          from { transform: translateY(50px); opacity: 0; }
+          to { transform: translateY(0); opacity: 1; }
+      }
+
+      .slide-in-left {
+          animation: slideInFromLeft 1s ease-out forwards;
+      }
+
+      .slide-in-right {
+          animation: slideInFromRight 1s ease-out forwards;
+      }
+
+      .scroll-up {
+          animation: scrollUp 1.5s ease-out forwards;
+      }
+
+    .delay-2s {
+        animation-delay: 2s;
+    }
+    </style>
 </head>
 <body class="bg-[#99431f] font-['Poppins']">
   <div class="desktop-view"> 
   <div class="w-full sm:w-[1920px]">
     <div class="YummiesRecipesDesktopIndex w-[1920px] h-[2158px] relative bg-[#99431f]">
           <?php include 'header.php'; //header ?>
-          <div class="Footer w-[1920px] h-[615px] px-[229px] pt-[135px] pb-[100px] left-0 top-[1543px] absolute bg-[#99431f] justify-between items-start inline-flex">
+          <div class="opacity-0 translate-y-10 scroll-up transition-opacity duration-1000 delay-500">
+            <div class="Footer w-[1920px] h-[615px] px-[229px] pt-[135px] pb-[100px] left-0 top-[1543px] absolute bg-[#99431f] justify-between items-start inline-flex scroll-up">
                 <div class="Frame51 h-[380px] flex-col justify-start items-start gap-[50px] inline-flex">
                     <div class="Frame45 flex-col justify-start items-start gap-[43px] flex">
                     <div class="InfoYummiesCom text-[#fefefe] text-[32px] font-normal font-['Poppins']">info@yummies.com</div>
@@ -57,8 +91,7 @@
                     </div>
                 </div>
             </div>
-          
-          <div class="InformationBubbles w-[1465px] left-[228px] top-[1192px] absolute">
+          <div class="InformationBubbles w-[1465px] left-[228px] top-[1192px] absolute scroll-up">
             <div class="Frame24 w-[465px] h-[351.27px] p-[35px] left-0 top-0 absolute rounded-[15px] border border-[#ffd633] flex-col justify-start items-start gap-[35px] inline-flex">
               <div class="Frame23 p-3 rounded-[5px] border border-[#ffd633] justify-start items-center gap-2.5 inline-flex">
                 <img class="Prvi1 w-[35px] h-[39.27px]" src="../slike/prvi.png" alt="info-icon"/>
@@ -87,11 +120,12 @@
               </div>
             </div>
           </div>
+          </div>
           <div class="NewHome w-[1706px] h-[935px] left-[1px] top-[181px] absolute justify-between items-center inline-flex z-[10]">
-            <div class="Main w-[824.14px] h-[893px] bg-[#99431f]">
+            <div class="Main w-[824.14px] h-[893px] bg-[#99431f] slide-in-left">
               <img src="../slike/main.png" alt="main">
             </div>
-            <div class="Frame427320855 w-[707px] flex-col justify-center items-center gap-[67px] inline-flex">
+            <div class="Frame427320855 w-[707px] flex-col justify-center items-center gap-[67px] inline-flex slide-in-right">
               <div class="Frame427320853 w-[707px] h-[626px] relative flex-col justify-start items-start flex">
                 <div class="relative w-[707px] h-[630px] bg-cover bg-center" style="background-image: url('../slike/BG.png');">
                   <div class="absolute inset-0 flex items-center justify-center">
@@ -124,6 +158,7 @@
         <div class="YummiesRecipesPhoneIndex w-[360px] h-[1968px] relative bg-[#99431f]">
           <?php include 'phone-header.php'; //header ?>
             <div class="Home h-[360px] px-5 py-2 left-0 top-[112px] absolute flex-col justify-start items-center gap-4 inline-flex">
+              <div class="opacity-0 translate-y-10 scroll-up transition-opacity duration-1000 delay-500">
                 <div class="Frame427320857 h-56 relative"> <!-- Make this parent relative -->
                     <div class="w-80 h-56 bg-cover bg-center" style="background-image: url('../slike/BG-phone.png');">
                         <div class="flex items-center justify-center h-full"> <!-- Center with flexbox -->
@@ -138,10 +173,14 @@
                         Get Started
                     </button>
                 </div>
+              </div>
+              <div class="opacity-0 translate-y-10 scroll-up transition-opacity duration-1000 delay-500">  
                 <div class="Bg w-[312px] h-[471px] bg-[#99431f] mt-[4px]">
                     <img src="../slike/main-phone.png" alt="main" class="w-full h-full object-cover">
-                </div>            
+                </div>
+              </div>
             </div>
+            <div class="opacity-0 translate-y-10 scroll-up transition-opacity duration-1000 delay-500">
             <div class="Archivment w-80 h-[751.46px] absolute top-[902px] left-1/2 transform -translate-x-1/2 flex-col justify-center items-center gap-[23.75px] flex">
                 <div class="Frame24 h-[236.36px] p-[23.75px] rounded-[10.18px] border border-[#ffd633] flex flex-col justify-start items-start gap-[23.75px]">
                     <div class="Frame23 p-[8.14px] rounded border border-[#ffd633] flex items-center gap-[6.79px]">
@@ -173,6 +212,8 @@
                     </div>
                 </div>
             </div>
+            </div>
+            <div class="opacity-0 translate-y-10 scroll-up transition-opacity duration-1000 delay-500">
             <div class="Footer w-[360px] h-72 px-11 pt-8 pb-5 left-[3px] top-[1658px] absolute bg-[#99431f] flex-col justify-start items-center gap-8 inline-flex">
                 <div class="PhoneFooter flex-col justify-start items-start gap-10 flex">
                   <div class="Frame45 h-44 flex-col justify-start items-start gap-9 flex">
@@ -198,8 +239,46 @@
                   </div>
                 </div>
             </div>
+            </div>
         </div>
     </div>
     <script src="js/phone-menu.js"></script>
+    <script>
+        // Select elements to animate
+        const targets = document.querySelectorAll('.scroll-up');
+        
+        // Configure observer options
+        const observerOptions = {
+          root: null, 
+          rootMargin: '0px',
+          threshold: 0.4 // Trigger when 40% of the element is visible
+        };
+        
+        const debounce = (fn, delay) => {
+          let timer;
+          return function (...args) {
+            clearTimeout(timer);
+            timer = setTimeout(() => fn.apply(this, args), delay);
+          };
+        };
+        
+        // Observer function for handling entry events
+        const observerCallback = debounce((entries, observer) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('delay-2s');
+              entry.target.classList.add('scroll-up');
+        
+              // Unobserve to prevent repeated triggering
+              observer.unobserve(entry.target);
+            }
+          });
+        }, 200); // Adjust delay to fit your needs
+        
+        // Create observer and apply to each target
+        const observer = new IntersectionObserver(observerCallback, observerOptions);
+        targets.forEach(target => observer.observe(target));
+
+    </script>
 </body>
 </html>

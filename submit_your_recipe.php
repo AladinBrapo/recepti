@@ -71,6 +71,11 @@ if (isset($_SESSION['log']) && isset($_SESSION['uporabnik_id'])) {
 
                     if (mysqli_query($link, $sql)) {
                         $message = '<div class="success-msg">Recipe and image inserted successfully.</div>';
+                        echo "<script>
+                            setTimeout(function() {
+                                window.location.href = 'search.php';
+                            }, 2000);
+                        </script>";
                     } else {
                         $message = '<div class="error-msg">Insert image failed.</div>';
                     }
