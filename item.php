@@ -150,7 +150,8 @@
   </div>
   <script src="js/phone-menu.js"></script>
     <script>
-    //var currentRating = 0; // Store current rating from PHP (set below)
+    var isLoggedIn = <?php echo isset($_SESSION['log']) ? 'true' : 'false'; ?>;
+    var currentRating = isLoggedIn === false ? 0 : someOtherValue;
 
     // Add event listeners to each star
     document.querySelectorAll('.star').forEach(star => {
